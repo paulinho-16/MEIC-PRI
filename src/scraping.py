@@ -10,7 +10,7 @@ import pandas as pd
 db = pd.read_csv('..\dataset\\netflix_list.csv', sep=",", low_memory=True)
 # print(db)
 
-def get_movie(id): 
+def get_movie(id):
     url = 'http://www.imdb.com/title/' + id
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
