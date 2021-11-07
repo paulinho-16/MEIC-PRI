@@ -19,59 +19,25 @@ def get_cast(imdb_id):
         for person in cast:
             cast_names.append(person['name'])
     except:
-        print("Exception getting info from tt" + imdb_id)
+        print("Exception getting info from " + imdb_id)
         return "-"
     return cast_names
     
 cast_nulls['cast'] = cast_nulls.apply(lambda x: get_cast(x['imdb_id']), axis=1)
-
-# print(cast_nulls)
-    
 arr = cast_nulls['cast'].to_numpy()
-
 df.loc[df['cast'] == "-", 'cast'] = arr
-
 print(df.loc[df['cast'] == "-"])
 
+# Saves to file
 df.to_csv("cast.csv", index=False)
 
-# id
-code = "6468322"
- 
-# getting information
-# series = ia.get_movie(code)
+# Removes all TVEpisodes and blank ones
+df = df[df.type != "tvEpisode"]
+df = df[df.type.notnull()]
+print(df)
 
-# for i in series.data:
-#     print(i)
+df.to_csv("RemoveEpisodes.csv", index=False)
 
-
-
-
-
-
-
-# print("TITLE: " + series['original title'])
-
-# print('Genres:')
-# for genre in series['genres']:
-#     print(genre)
-
-
-# df["cast"].replace({"-": cast_names}, inplace=True)
-
-# print("SEASONS: " + str(series['seasons']))
-
-# print('CERTIFICATES: ')
-# cert_list = series['certificates']
-# certificates = {}
-
-# for cert in cert_list:
-#     splitted_cert = cert.split(':')
-#     certificates[splitted_cert[0]] = splitted_cert[1]
-
-# print(certificates.get("Canada"))
-
-# episodes = series.data['episodes']
 
 # localized title
 # original title
