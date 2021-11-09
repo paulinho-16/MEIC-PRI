@@ -1,5 +1,7 @@
 from imdb import IMDb
 import pandas as pd
+from requests import get
+from bs4 import BeautifulSoup
 
 # creating instance of IMDb
 imdb = IMDb()
@@ -72,51 +74,61 @@ imdb = IMDb()
 
 ########################### Scraping Years ############################
 
-df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True)
+# df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True)
 
-no_years = df.loc[(df['startYear'].isna() & df['endYear'].isna()) | (((df['type'] == "series") | (df['type'] == "miniSeries")) & (df['endYear'].isna()))]
+# no_years = df.loc[(df['startYear'].isna() & df['endYear'].isna()) | (((df['type'] == "series") | (df['type'] == "miniSeries")) & (df['endYear'].isna()))]
 
-def get_years(imdb_id):
-    print(imdb_id)
-    try:
-        movie_serie = imdb.get_movie(imdb_id[2:])
-        movie_series_type = no_years.loc[(no_years['imdb_id'] == imdb_id)].iloc[0]['type'] # Ir buscar o type em string
+# def get_years(imdb_id):
+#     print(imdb_id)
+#     try:
+#         movie_serie = imdb.get_movie(imdb_id[2:])
+#         movie_series_type = no_years.loc[(no_years['imdb_id'] == imdb_id)].iloc[0]['type'] # Ir buscar o type em string
 
-        print(movie_series_type)
+#         print(movie_series_type)
         
-        if ((movie_series_type == 'series') | (movie_series_type == 'miniSeries')):
-            years = movie_serie['series years']
-            startYear, endYear = years.split("-",1)
-        else:
-            startYear = movie_serie['year']
-            endYear = ""
-        return (startYear, endYear)
-    except Exception as e:
-        print("Exception getting year info from " + imdb_id + ": " + str(e))
-        return ("-", "-")
+#         if ((movie_series_type == 'series') | (movie_series_type == 'miniSeries')):
+#             years = movie_serie['series years']
+#             startYear, endYear = years.split("-",1)
+#         else:
+#             startYear = movie_serie['year']
+#             endYear = ""
+#         return (startYear, endYear)
+#     except Exception as e:
+#         print("Exception getting year info from " + imdb_id + ": " + str(e))
+#         return ("-", "-")
 
-print("# Series")
-print(get_years("tt4052886")) # series
-print("# Movie")
-print(get_years("tt1488589")) # movie
-print("# MiniSerie")
-print(no_years.loc[(no_years['imdb_id'] == 10048342)])
-print(get_years("tt12837400")) # miniSeries
-print("# Short")
-nova = df.loc[(df['startYear'].isna() & df['endYear'].isna() & (df['type'] == 'short')) | (df['type'] == 'series')]
-print(nova.loc[df['type'] == 'short'])
-print(df.loc[(df['startYear'].isna() & df['endYear'].isna() & (df['type'] == 'short')) | (df['type'] == 'series')])
-print(no_years.loc[(no_years['imdb_id'] == 13871260)]) # TODO: Devia entrar no filtro e não entra
-print(get_years("tt13871260")) # short
-print("# Special")
-print(get_years("tt13567480")) # special
-print("# Video")
-print(get_years("tt1107365")) # video
+# print("# Series")
+# print(get_years("tt4052886")) # series
+# print("# Movie")
+# print(get_years("tt1488589")) # movie
+# print("# MiniSerie")
+# print(no_years.loc[(no_years['imdb_id'] == 10048342)])
+# print(get_years("tt12837400")) # miniSeries
+# print("# Short")
+# nova = df.loc[(df['startYear'].isna() & df['endYear'].isna() & (df['type'] == 'short')) | (df['type'] == 'series')]
+# print(nova.loc[df['type'] == 'short'])
+# print(df.loc[(df['startYear'].isna() & df['endYear'].isna() & (df['type'] == 'short')) | (df['type'] == 'series')])
+# print(no_years.loc[(no_years['imdb_id'] == 13871260)]) # TODO: Devia entrar no filtro e não entra
+# print(get_years("tt13871260")) # short
+# print("# Special")
+# print(get_years("tt13567480")) # special
+# print("# Video")
+# print(get_years("tt1107365")) # video
 
 # Saves to file
 # df.to_csv("ScrapingYears.csv", index=False)
 
 ########################### Scraping Episodes ############################
+
+def get_episodes(imdb_id):
+    url = 'https://www.imdb.com/title/' + imdb_id
+    response = get(url)
+    print(response.text[:250])
+    html_soup = BeautifulSoup(response.text, 'html.parser')
+    episode_containers = html_soup.find_all('div', class_='SubNav__SubNavContainer-sc-11106ua-1 hDUKxp')
+    episode_number = episode_containers[0].find('span', class_ = 'EpisodeNavigationForSeries__EpisodeCountSpan-sc-1aswzzz-3 jbsbnI').text
+    print(episode_number)
+
 
 # df = pd.read_csv('ScrapingYears.csv', sep=",", low_memory=True)
 
@@ -124,6 +136,7 @@ print(get_years("tt1107365")) # video
 
 # # Saves to file
 # df.to_csv("ScrapingEpisodes.csv", index=False)
+get_episodes('tt7767422')
 
 ########################### Scraping Runtimes ############################
 
