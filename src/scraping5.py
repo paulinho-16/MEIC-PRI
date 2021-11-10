@@ -1,13 +1,9 @@
 from imdb import IMDb
 import pandas as pd
 from requests import get
-from bs4 import BeautifulSoup
 
 # creating instance of IMDb
 imdb = IMDb()
-
-
-
 
 
 ########################## Trim Title Spaces ##########################
@@ -16,12 +12,6 @@ imdb = IMDb()
 
 # df['title'] = df['title'].str.strip()
 # df.to_csv("TitleSpaceTrim.csv", index=False)
-
-
-
-
-
-
 
 
 ############################ Remove Types #############################
@@ -40,10 +30,6 @@ imdb = IMDb()
 # df.to_csv("RemoveTypes.csv", index=False)
 
 
-
-
-
-
 ############################ Rename Types #############################
 
 # df = pd.read_csv('RemoveTypes.csv', sep=",", low_memory=True)
@@ -51,11 +37,6 @@ imdb = IMDb()
 # df['type'] = df['type'].replace(['tvSeries','tvMiniSeries','tvShort','tvSpecial','tvMovie', 'video'],['series','miniSeries','short','special','movie','animation'])
 
 # df.to_csv("RenameTypes.csv", index=False)
-
-
-
-
-
 
 
 ####################### Delete Plot and isAdult #######################
@@ -67,10 +48,6 @@ imdb = IMDb()
 # df.to_csv("DeleteColumns.csv", index=False)
 
 
-
-
-
-
 ########################### Refactor Genres  ##########################
 
 # df = pd.read_csv('DeleteColumns.csv', sep=",", low_memory=True)
@@ -80,49 +57,43 @@ imdb = IMDb()
 # df.to_csv("RefactorGenres.csv", index=False)
 
 
-
-
-
-
-
 ######################## Scraping Certificate #########################
 
-df = pd.read_csv('RefactorGenres.csv', sep=",", low_memory=True)  # TODO: Mudar para ScrapingNumVotes
+# df = pd.read_csv('RefactorGenres.csv', sep=",", low_memory=True)  # TODO: Mudar para ScrapingNumVotes
 
-arr = df["imdb_id"].to_numpy()
+# arr = df["imdb_id"].to_numpy()
 
-def get_certificates(imdb_id):
-    print(imdb_id)
-    try:
-        movie_serie = imdb.get_movie(imdb_id[2:])
-        certificates = movie_serie['certificates']
-        certificates_list = []
-        for cert in certificates:
-            cert_list = cert.split(":",2) # TODO: SEE
-            cert_list.pop()
-            print(cert_list)
-            certificates_list+=cert_list
-        certificates_dict = {certificates_list[i]: certificates_list[i + 1] for i in range(0, len(certificates_list), 2)}
-        return certificates_dict
-    except imdb.IMDbDataAccessError as e:
-        print('Invalid IMDB id')
-        return "Not available" # TODO: possivelmente eliminar do dataset
-    except Exception as e:
-        print("Exception getting certificates info from " + imdb_id)
-        print(str(e))
-        return "Not available"
-    return certificates
+# def get_certificates(imdb_id):
+#     print(imdb_id)
+#     try:
+#         movie_serie = imdb.get_movie(imdb_id[2:])
+#         certificates = movie_serie['certificates']
+#         certificates_list = []
+#         for cert in certificates:
+#             if cert.count(":")>1:
+#                 cert_list = cert.split(":",2)
+#                 cert_list.pop()
+#             else:
+#                 cert_list = cert.split(":",1)
+#             certificates_list+=cert_list
+#         certificates_dict = {certificates_list[i]: certificates_list[i + 1] for i in range(0, len(certificates_list), 2)}
+#         return certificates_dict
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
+#     except Exception as e:
+#         print("Exception getting certificates info from " + imdb_id)
+#         print(str(e))
+#         return "Not available"
     
-# df['certificate'] = df.apply(lambda x: get_certificates(x['imdb_id']), axis=1)
-# arrCert = df['certificate'].to_numpy()
-# df.loc[df['certificate'], 'certificates'] = arrCert
+# # df['certificate'] = df.apply(lambda x: get_certificates(x['imdb_id']), axis=1)
+# # arrCert = df['certificate'].to_numpy()
+# # df.loc[df['certificate'], 'certificates'] = arrCert
 
-# Saves to file
-# df.to_csv("ScrapingGenres.csv", index=False)
+# # Saves to file
+# # df.to_csv("ScrapingGenres.csv", index=False)
 
-print(get_certificates("tt3743822"))
-
-
+# print(get_certificates("tt3743822"))
 
 
 ############################ Scraping Cast ############################
@@ -157,56 +128,52 @@ print(get_certificates("tt3743822"))
 # df.to_csv("ScrapingCast.csv", index=False)
 
 
-
-
-
-
 ########################### Scraping Years ############################
 
-# df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True)
+df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True)
 
-# # No start and end year together
-# no_start_end_years = df.loc[(df['startYear'].isna() & df['endYear'].isna())]
+# No start and end year together
+no_start_end_years = df.loc[(df['startYear'].isna() & df['endYear'].isna())]
 
-# # Miniseries or Series without endYear
-# no_endYear = df.loc[((df['type'] == "series") | (df['type'] == "miniSeries")) & df['endYear'].isna()]
+# Miniseries or Series without endYear
+no_endYear = df.loc[((df['type'] == "series") | (df['type'] == "miniSeries")) & df['endYear'].isna()]
 
-# # Concatenate without duplicates
-# no_years = pd.concat([no_start_end_years,no_endYear]).drop_duplicates().reset_index(drop=True)
-# count = 0
+# Concatenate without duplicates
+no_years = pd.concat([no_start_end_years,no_endYear]).drop_duplicates().reset_index(drop=True)
+count = 0
 
-# def get_years(imdb_id):
-#     print(imdb_id)
-#     global count
-#     count+=1
-#     print(count)
-#     try:
-#         movie_serie = imdb.get_movie(imdb_id[2:])
-#         movie_series_type = no_years.loc[(no_years['imdb_id'] == imdb_id)].iloc[0]['type']
+def get_years(imdb_id):
+    print(imdb_id)
+    global count
+    count+=1
+    print(count)
+    try:
+        movie_serie = imdb.get_movie(imdb_id[2:])
+        movie_series_type = no_years.loc[(no_years['imdb_id'] == imdb_id)].iloc[0]['type']
         
-#         if ((movie_series_type == 'series')):
-#             years = movie_serie['series years']
-#             startYear, endYear = years.split("-",1)
-#         else:
-#             startYear = movie_serie['year']
-#             endYear = "Not available"
-#         return (startYear, endYear)
-#     except imdb.IMDbDataAccessError as e:
-#         print('Invalid IMDB id')
-#         return "Not available" # TODO: possivelmente eliminar do dataset
-#     except Exception as e:
-#         print("Exception getting year info from " + imdb_id + ": " + str(e))
-#         return ("Not available", "Not available")
+        if (movie_series_type == 'series'):
+            years = movie_serie['series years']
+            print(years)
+            startYear, endYear = years.split("-",1)
+        else:
+            startYear = movie_serie['year']
+            endYear = "Not available"
+        return (startYear, endYear)
+    # except imdb.IMDbDataAccessError as e:
+    #     print('Invalid IMDB id')
+    #     return "Not available" # TODO: possivelmente eliminar do dataset
+    except:
+        print("Exception getting year info from " + imdb_id)
+    return ("Not available", "Not available")
 
-# no_years['startYear'], no_years['endYear'] = no_years.apply(lambda x: get_years(x['imdb_id']), axis=1)
-# arr1, arr2 = no_years['startYear'].to_numpy(), no_years['endYear'].to_numpy()
+
+no_years['startYear'], no_years['endYear'] = no_years.apply(lambda x: get_years(x['imdb_id']), axis=1) # TODO: Corrigir, no count=1664 dá ValueError: too many values to unpack (expected 2) 
+arr1, arr2 = no_years['startYear'].to_numpy(), no_years['endYear'].to_numpy()
 # df.loc[df['startYear'].isna(), 'startYear'], df.loc[df['endYear'].isna(), 'endYear'] = arr1, arr2
+df.loc[(df['startYear'].isna() & df['endYear'].isna()) | (((df['type'] == "series") | (df['type'] == "miniSeries")) & df['endYear'].isna()), 'startYear'], df.loc[(df['startYear'].isna() & df['endYear'].isna()) | (((df['type'] == "series") | (df['type'] == "miniSeries")) & df['endYear'].isna()), 'endYear'] = arr1, arr2
 
-# # Saves to file
-# df.to_csv("ScrapingYears.csv", index=False)
-
-
-
+# Saves to file
+df.to_csv("ScrapingYears.csv", index=False)
 
 
 ########################### Scraping Episodes ############################
@@ -249,26 +216,30 @@ print(get_certificates("tt3743822"))
         
 #         print('Total episodes: ' + str(total_episodes))
 #         return str(total_episodes)
-#     except imdb.IMDbDataAccessError as e:
-#         print('Invalid IMDB id')
-#         return "Not available" # TODO: possivelmente eliminar do dataset
-#     except Exception as e:
-#         print("Exception getting episodes info from " + imdb_id + ": " + str(e))
-#         return "Not available"
+#     # except imdb.IMDbDataAccessError as e:
+#     #     print('Invalid IMDB id')
+#     #     return "Not available" # TODO: possivelmente eliminar do dataset
+#     except:
+#         print("Exception getting episodes info from " + imdb_id)
+#     return "Not available"
 
 
-# no_episodes['episode'] = no_episodes.apply(lambda x: get_episodes(x['imdb_id']), axis=1)
-# arrEpisodes = no_episodes['episode'].to_numpy()
-# df.loc[df['episode'].isna(), 'episode'] = arrEpisodes
+# no_episodes['episodes'] = no_episodes.apply(lambda x: get_episodes(x['imdb_id']), axis=1)
+# arrEpisodes = no_episodes['episodes'].to_numpy()
+
+# # print('NAAAAASSS###################')
+# # print(df.loc[(df['episodes'].isna() & ((df['type'] == "series") | (df['type'] == "miniSeries"))), 'episodes'])
+
+# # print('\nARRRAYYYYYYYYYYYYYYYYYYYYYYY')
+# # print(arrEpisodes)
+
+# df.loc[(df['episodes'].isna() & ((df['type'] == "series") | (df['type'] == "miniSeries"))), 'episodes'] = arrEpisodes
+
+# # Change blanks to Not Available
+# df.loc[df['episodes'].isna(), 'episodes'] = "Not available"
 
 # # Saves to file
 # df.to_csv("ScrapingEpisodes.csv", index=False)
-
-# # print(no_episodes)
-# # print(get_episodes("tt14518284"))
-
-
-
 
 
 ########################### Scraping Runtimes ############################
@@ -306,11 +277,6 @@ print(get_certificates("tt3743822"))
 # TODO: Talvez mudar de string para int
 
 
-
-
-
-
-
 ######################## Scraping Origin Country #########################
 
 # df = pd.read_csv('DeleteColumns.csv', sep=",", low_memory=True) # TODO: Mudar para ScrapingRuntimes
@@ -338,10 +304,6 @@ print(get_certificates("tt3743822"))
 # df.to_csv("ScrapingCountries.csv", index=False)
 
 
-
-
-
-
 ########################### Scraping Language ############################
 
 # df = pd.read_csv('DeleteColumns.csv', sep=",", low_memory=True) # TODO: Mudar para ScrapingCountries
@@ -367,9 +329,6 @@ print(get_certificates("tt3743822"))
 
 # Saves to file
 # df.to_csv("ScrapingLanguage.csv", index=False)
-
-
-
 
 
 ############################ Scraping Summary ############################
@@ -402,7 +361,6 @@ print(get_certificates("tt3743822"))
 # print(get_summaries("tt14641788"))
 
 
-
 ############################ Scraping Rating #############################
 
 # df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True) # TODO: Mudar para ScrapingSummary
@@ -431,9 +389,6 @@ print(get_certificates("tt3743822"))
 # df.to_csv("ScrapingRating.csv", index=False)
 
 
-
-
-
 ############################ Scraping NumVotes ###########################
 
 # df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True) # TODO: Mudar para ScrapingRating
@@ -460,10 +415,6 @@ print(get_certificates("tt3743822"))
 
 # # Saves to file
 # # df.to_csv("ScrapingNumVotes.csv", index=False)
-
-
-
-
 
 
 ############################# Scraping Genres ############################
