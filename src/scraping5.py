@@ -23,6 +23,7 @@ imdb = IMDb()
 
 
 
+
 ############################ Remove Types #############################
 
 # df = pd.read_csv('TitleSpaceTrim.csv', sep=",", low_memory=True)
@@ -70,10 +71,63 @@ imdb = IMDb()
 
 
 
+########################### Refactor Genres  ##########################
+
+# df = pd.read_csv('DeleteColumns.csv', sep=",", low_memory=True)
+
+# df['genres'] = df['genres'].apply(lambda x: [i for i in x.split(",")])
+
+# df.to_csv("RefactorGenres.csv", index=False)
+
+
+
+
+
+
+
+######################## Scraping Certificate #########################
+
+df = pd.read_csv('RefactorGenres.csv', sep=",", low_memory=True)  # TODO: Mudar para ScrapingNumVotes
+
+arr = df["imdb_id"].to_numpy()
+
+def get_certificates(imdb_id):
+    print(imdb_id)
+    try:
+        movie_serie = imdb.get_movie(imdb_id[2:])
+        certificates = movie_serie['certificates']
+        certificates_list = []
+        for cert in certificates:
+            cert_list = cert.split(":",2) # TODO: SEE
+            cert_list.pop()
+            print(cert_list)
+            certificates_list+=cert_list
+        certificates_dict = {certificates_list[i]: certificates_list[i + 1] for i in range(0, len(certificates_list), 2)}
+        return certificates_dict
+    except imdb.IMDbDataAccessError as e:
+        print('Invalid IMDB id')
+        return "Not available" # TODO: possivelmente eliminar do dataset
+    except Exception as e:
+        print("Exception getting certificates info from " + imdb_id)
+        print(str(e))
+        return "Not available"
+    return certificates
+    
+# df['certificate'] = df.apply(lambda x: get_certificates(x['imdb_id']), axis=1)
+# arrCert = df['certificate'].to_numpy()
+# df.loc[df['certificate'], 'certificates'] = arrCert
+
+# Saves to file
+# df.to_csv("ScrapingGenres.csv", index=False)
+
+print(get_certificates("tt3743822"))
+
+
+
 
 ############################ Scraping Cast ############################
 
-# df = pd.read_csv('DeleteColumns.csv', sep=",", low_memory=True)
+# df = pd.read_csv('RefactorGenres.csv', sep=",", low_memory=True)
 
 # cast_nulls = df.loc[(df['cast'] == "-")]
 # arr = cast_nulls["imdb_id"].to_numpy()
@@ -86,6 +140,9 @@ imdb = IMDb()
 #         cast = movie_serie['cast']
 #         for person in cast:
 #             cast_names.append(person['name'])
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
 #     except:
 #         print("Exception getting info from " + imdb_id)
 #         return "Not available"
@@ -132,8 +189,11 @@ imdb = IMDb()
 #             startYear, endYear = years.split("-",1)
 #         else:
 #             startYear = movie_serie['year']
-#             endYear = ""
+#             endYear = "Not available"
 #         return (startYear, endYear)
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
 #     except Exception as e:
 #         print("Exception getting year info from " + imdb_id + ": " + str(e))
 #         return ("Not available", "Not available")
@@ -151,23 +211,61 @@ imdb = IMDb()
 
 ########################### Scraping Episodes ############################
 
+# df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True) # TODO: Mudar para ScrapingYears
+
+# # no_episodes = df.loc[df['episodes'].isna() & ((df['type'] == "series") | (df['type'] == "miniSeries"))]
+
+# # All series and miniSeries
+# series_miniseries = df.loc[(df['type'] == "series") | (df['type'] == "miniSeries")]
+
+# # Miniseries or Series without endYear
+# no_episodes = series_miniseries.loc[series_miniseries['episodes'].isna()]
+
+# # # Concatenate without duplicates
+# # no_years = pd.concat([no_start_end_years,no_endYear]).drop_duplicates().reset_index(drop=True)
+# # count = 0
+
 # def get_episodes(imdb_id):
-#     url = 'https://www.imdb.com/title/' + imdb_id
-#     response = get(url)
-#     print(response.text[:250])
-#     html_soup = BeautifulSoup(response.text, 'html.parser')
-#     episode_containers = html_soup.find_all('div', class_='SubNav__SubNavContainer-sc-11106ua-1 hDUKxp')
-#     episode_number = episode_containers[0].find('span', class_ = 'EpisodeNavigationForSeries__EpisodeCountSpan-sc-1aswzzz-3 jbsbnI').text
-#     print(episode_number)
+#     total_episodes = 0
+    
+#     print(imdb_id)
+
+#     try:
+#         # getting information
+#         series = imdb.get_movie(imdb_id[2:])
+        
+#         # adding new info set
+#         imdb.update(series, 'episodes')
+        
+#         # getting episodes of the series
+#         episodes = series.data['episodes']
+        
+#         # printing total episodes of each season
+#         # traversing each key
+#         for i in episodes.keys():
+            
+#             # getting total episode in season i
+#             total_episodes = total_episodes + len(episodes[i])
+        
+#         print('Total episodes: ' + str(total_episodes))
+#         return str(total_episodes)
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
+#     except Exception as e:
+#         print("Exception getting episodes info from " + imdb_id + ": " + str(e))
+#         return "Not available"
 
 
-# df = pd.read_csv('ScrapingYears.csv', sep=",", low_memory=True)
-
-# # TODO - BeautifulSoup
+# no_episodes['episode'] = no_episodes.apply(lambda x: get_episodes(x['imdb_id']), axis=1)
+# arrEpisodes = no_episodes['episode'].to_numpy()
+# df.loc[df['episode'].isna(), 'episode'] = arrEpisodes
 
 # # Saves to file
 # df.to_csv("ScrapingEpisodes.csv", index=False)
-# get_episodes('tt7767422')
+
+# # print(no_episodes)
+# # print(get_episodes("tt14518284"))
 
 
 
@@ -185,6 +283,9 @@ imdb = IMDb()
 #         movie_serie = imdb.get_movie(imdb_id[2:])
 #         runtimes = movie_serie['runtimes']
 #         return runtimes[0]
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
 #     except Exception as e:  
 #         print("Exception getting runtime info from " + imdb_id + ": " + str(e))
 #         return "Not available"
@@ -222,6 +323,9 @@ imdb = IMDb()
 #         movie_serie = imdb.get_movie(imdb_id[2:])
 #         origin_country = movie_serie['countries']
 #         return origin_country[0]
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
 #     except Exception as e:  
 #         print("Exception getting runtime info from " + imdb_id + ": " + str(e))
 #         return "Not available"
@@ -232,6 +336,8 @@ imdb = IMDb()
 
 # Saves to file
 # df.to_csv("ScrapingCountries.csv", index=False)
+
+
 
 
 
@@ -248,6 +354,9 @@ imdb = IMDb()
 #         movie_serie = imdb.get_movie(imdb_id[2:])
 #         language = movie_serie['languages']
 #         return language[0]
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
 #     except Exception as e:  
 #         print("Exception getting language info from " + imdb_id + ": " + str(e))
 #         return "Not available"
@@ -258,6 +367,138 @@ imdb = IMDb()
 
 # Saves to file
 # df.to_csv("ScrapingLanguage.csv", index=False)
+
+
+
+
+
+############################ Scraping Summary ############################
+
+# df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True) # TODO: Mudar para ScrapingLanguage
+
+# no_summary = df.loc[(df['summary'] == "-") | (df['summary'] == "Plot unknown.")]
+
+# def get_summaries(imdb_id):
+#     print(imdb_id)
+#     try:
+#         movie_serie = imdb.get_movie(imdb_id[2:])
+#         summary = movie_serie['plot']
+#         return summary[0]
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
+#     except Exception as e:  
+#         print("Exception getting summary info from " + imdb_id + ": " + str(e))
+#         return "Not available"
+
+# no_summary['summary'] = no_summary.apply(lambda x: get_summaries(x['imdb_id']), axis=1)
+# arrSummaries = no_summary['summary'].to_numpy()
+# df.loc[df['summary'].isna(), 'summary'] = arrSummaries
+
+#Saves to file
+#df.to_csv("ScrapingSummaries.csv", index=False)
+
+# print(get_summaries("tt1136617"))
+# print(get_summaries("tt14641788"))
+
+
+
+############################ Scraping Rating #############################
+
+# df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True) # TODO: Mudar para ScrapingSummary
+
+# no_rating = df.loc[df['rating'].isna()]
+
+# def get_ratings(imdb_id):
+#     print(imdb_id)
+#     try:
+#         movie_serie = imdb.get_movie(imdb_id[2:])
+#         rating = movie_serie['rating']
+#         print(rating)
+#         return rating
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
+#     except Exception as e:  
+#         print("Exception getting rating info from " + imdb_id + ": " + str(e))
+#         return "Not available"
+
+# no_rating['rating'] = no_rating.apply(lambda x: get_ratings(x['imdb_id']), axis=1)
+# arrRatings = no_rating['rating'].to_numpy()
+# df.loc[df['rating'].isna(), 'rating'] = arrRatings
+
+# Saves to file
+# df.to_csv("ScrapingRating.csv", index=False)
+
+
+
+
+
+############################ Scraping NumVotes ###########################
+
+# df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True) # TODO: Mudar para ScrapingRating
+
+# no_numVotes = df.loc[df['numVotes'].isna()]
+
+# def get_num_votes(imdb_id):
+#     print(imdb_id)
+#     try:
+#         movie_serie = imdb.get_movie(imdb_id[2:])
+#         numVotes = movie_serie['votes']
+#         print(numVotes)
+#         return numVotes
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
+#     except Exception as e:  
+#         print("Exception getting numVotes info from " + imdb_id + ": " + str(e))
+#         return "Not available"
+
+# # no_numVotes['numVotes'] = no_numVotes.apply(lambda x: get_num_votes(x['imdb_id']), axis=1)
+# # arrVotes = no_numVotes['numVotes'].to_numpy()
+# # df.loc[df['numVotes'].isna(), 'numVotes'] = arrVotes
+
+# # Saves to file
+# # df.to_csv("ScrapingNumVotes.csv", index=False)
+
+
+
+
+
+
+############################# Scraping Genres ############################
+
+# df = pd.read_csv('ScrapingCast.csv', sep=",", low_memory=True)  # TODO: Mudar para ScrapingNumVotes
+
+# genres_nulls = df.loc[(df['genres'] == "\\N")]
+# arr = genres_nulls["imdb_id"].to_numpy()
+
+# def get_genres(imdb_id):
+#     print(imdb_id)
+#     genres_names = []
+#     try:
+#         movie_serie = imdb.get_movie(imdb_id[2:])
+#         genres = movie_serie['genres']
+#         return genres
+#     except imdb.IMDbDataAccessError as e:
+#         print('Invalid IMDB id')
+#         return "Not available" # TODO: possivelmente eliminar do dataset
+#     except:
+#         print("Exception getting info from " + imdb_id)
+#         return "Not available"
+#     return genres_names
+    
+# genres_nulls['genres'] = genres_nulls.apply(lambda x: get_genres(x['imdb_id']), axis=1)
+# arrGenres = genres_nulls['genres'].to_numpy()
+# df.loc[df['genres'] == "\\N", 'genres'] = arrGenres
+
+# Saves to file
+# df.to_csv("ScrapingGenres.csv", index=False)
+
+
+
+
+
 
 
 # localized title
