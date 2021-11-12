@@ -1,15 +1,10 @@
-from imdb import IMDb
 import pandas as pd
-from requests import get
 from pathlib import Path
 
-# Creating instance of IMDb
-imdb = IMDb()
-
-data_folder = Path("./datasets")
+datasets_folder = Path("./datasets")
 
 # Read the original dataset
-df = pd.read_csv(data_folder/'netflix_list.csv', sep=",", low_memory=True)
+df = pd.read_csv(datasets_folder/'netflix_list.csv', sep=",", low_memory=True)
 
 # Trim Title Spaces
 df['title'] = df['title'].str.strip()
@@ -29,4 +24,4 @@ df = df.drop(columns=['isAdult', 'plot'])
 df['genres'] = df['genres'].apply(lambda x: [i for i in x.split(",")])
 
 # Save the cleaned data to csv
-df.to_csv(data_folder/"cleaning.csv", index=False)
+df.to_csv(datasets_folder/"cleaning.csv", index=False)
