@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 import seaborn as sns
+import plotly.graph_objects as go
+import statistics
 
 
 datasets_folder = Path("./datasets")
@@ -25,29 +27,37 @@ df = pd.read_csv(datasets_folder/'cleaning.csv', sep=",", low_memory=True) # TOD
 # plt.grid(True)
 # plt.show()
 
-def get_decade(year):
+# def get_decade(year):
     
-decades = []
-ratings = []
+# decades = []
+# ratings = []
 
-decades[get_decade(year)]
+# decades[get_decade(year)]
 
-plt.plot(result.index, result['rating'])
-plt.xlabel('startYear')
-plt.ylabel('rating')
-plt.title('Release Year vs Rating', y=1.1)
-plt.grid()
-plt.show()
+# plt.plot(result.index, result['rating'])
+# plt.xlabel('startYear')
+# plt.ylabel('rating')
+# plt.title('Release Year vs Rating', y=1.1)
+# plt.grid()
+# plt.show()
 
-sns.boxplot( x=df["startYear"], y=df["rating"] )
-plt.show()
+# sns.boxplot( x=df["startYear"], y=df["rating"] )
+# plt.show()
 
-# df_series = df.loc(df['type'] == 'series' & df['runtime'] != 'Not Available')
-# df_movie = df.loc(df['type'] == 'movie' & df['runtime'] != 'Not Available')
-# df_miniseries = df.loc(df['type'] == 'miniSeries' & df['runtime'] != 'Not Available')
-# df_short = df.loc(df['type] == 'short' & df['runtime'] != 'Not Available')
-# df_special = df.loc(df['type'] == 'special' & df['runtime'] != 'Not Available')
-# df_video = df.loc(df['type'] == 'video' & df['runtime'] != 'Not Available')
+df_series = df.loc[((df['type'] == 'series') & (df['runtime'] != "\\N"))] #TO-DO: Substituir por Not Available 
+df_movie = df.loc[((df['type'] == 'movie') & (df['runtime'] != "\\N"))]
+df_miniseries = df.loc[((df['type'] == 'miniSeries') & (df['runtime'] != "\\N"))]
+df_short = df.loc[((df['type'] == 'short') & (df['runtime'] != "\\N"))]
+df_special = df.loc[((df['type'] == 'special') & (df['runtime'] != "\\N"))]
 
-# table = go.figure(data = go.Table(header = dict(values = ['', 'Mean']),
-#                     cells = dict(values = [['Rating', 'MiniSeries Runtime', 'Movies Runtime', 'Series Runtime', 'Shorts Runtime', 'Special Runtime', 'Video Runtime'], df['rating'].mean, ])))
+# print(statistics.mean(pd.to_numeric(df_video['runtime'])))
+
+table_mean = go.Figure(data = go.Table(header = dict(values = ['', 'Mean']),
+                    cells = dict(values = [['Rating', 'MiniSeries Runtime', 'Movies Runtime', 'Series Runtime', 'Shorts Runtime', 'Special Runtime'], [pd.to_numeric(df['rating']).mean(), statistics.mean(pd.to_numeric(df_miniseries['runtime'])), statistics.mean(pd.to_numeric(df_movie['runtime'])), statistics.mean(pd.to_numeric(df_series['runtime'])), statistics.mean(pd.to_numeric(df_short['runtime'])), statistics.mean(pd.to_numeric(df_special['runtime']))]])))
+
+table_mean.show()
+
+table_max = go.Figure(data = go.Table(
+                    cells = dict(values = [['Min Rating', 'Max Rating'], [pd.to_numeric(df['rating']).min(), pd.to_numeric(df['rating']).max()]])))
+
+table_max.show()
