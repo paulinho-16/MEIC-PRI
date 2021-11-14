@@ -17,6 +17,9 @@ df = df[df.type.notnull()]
 # Rename Types
 df['type'] = df['type'].replace(['tvSeries','tvMiniSeries','tvShort','tvSpecial','tvMovie', 'video'],['series','miniSeries','short','special','movie','animation'])
 
+# Rename Columns
+df = df.rename(columns={'imdb_id':'imdbID', 'popular_rank':'popularRank', 'orign_country':'originCountry', 'image_url':'imageURL'})
+
 # Delete Plot and isAdult
 df = df.drop(columns=['isAdult', 'plot'])
 
