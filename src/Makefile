@@ -1,12 +1,16 @@
-target: pre-req1 pre-req2 pre-req3 ...
-    recipes
-    ...
-
 run:
     python cleaning.py
+    python scraping.py
+    python exploration.py
 
-setup: requirements.txt
-    pip install -r requirements.txt
+cleaning:
+    python cleaning.py
+
+scraping:
+    python scraping.py
+
+exploration:
+    python exploration.py
 
 clean:
     rm -rf __pycache__
