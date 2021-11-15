@@ -29,11 +29,15 @@ def get_decade(year):
 df_copy = df.copy()
 df_copy = df_copy.astype({'startYear': str})
 
-df_copy['startYear'] = df_copy['startYear'].apply(lambda x: get_decade(x[:-2]) if x != "nan" else "Not available")
+df_copy['startYear'] = df_copy['startYear'].apply(lambda x: get_decade(x[:-2]) if x != "Not available" else "Not available")
 
 df_copy = df_copy[df_copy.startYear != "Not available"]
+df_copy = df_copy[df_copy.rating != "Not available"]
 
 df_copy = df_copy.sort_values('startYear')
+df_copy["rating"] = df_copy["rating"].astype(float)
+
+print(df_copy['startYear'])
 
 fig = plt.figure()
 sns.boxplot(x=df_copy["startYear"], y=df_copy["rating"])
@@ -85,7 +89,10 @@ plt.savefig('plots/countriesDistribution.png')
 plt.close(fig)
 
 # Distribution of genres Bar Chart
-genres = [ast.literal_eval(x) for x in df["genres"]]
+df_copy = df.copy()
+df_copy = df_copy[df_copy.genres != "Not available"] 
+
+genres = [ast.literal_eval(x) for x in df_copy["genres"]]
 genres = [item for sublist in genres for item in sublist]
 
 freq = {}
@@ -144,14 +151,15 @@ plt.savefig('plots/castDistribution.png')
 plt.close(fig)
 
 # Table with generic statistics
-df_series = df.loc[((df['type'] == 'series') & (df['runtime'] != "Not Available"))] 
-df_movie = df.loc[((df['type'] == 'movie') & (df['runtime'] != "Not Available"))]
-df_miniseries = df.loc[((df['type'] == 'miniSeries') & (df['runtime'] != "Not Available"))]
-df_short = df.loc[((df['type'] == 'short') & (df['runtime'] != "Not Available"))]
-df_special = df.loc[((df['type'] == 'special') & (df['runtime'] != "Not Available"))]
+df_series = df.loc[((df['type'] == 'series') & (df['runtime'] != "Not available") & (df['rating'] != "Not available"))] 
+df_movie = df.loc[((df['type'] == 'movie') & (df['runtime'] != "Not available") & (df['rating'] != "Not available"))]
+df_miniseries = df.loc[((df['type'] == 'miniSeries') & (df['runtime'] != "Not available") & (df['rating'] != "Not available"))]
+df_short = df.loc[((df['type'] == 'short') & (df['runtime'] != "Not available") & (df['rating'] != "Not available"))]
+df_special = df.loc[((df['type'] == 'special') & (df['runtime'] != "Not available") & (df['rating'] != "Not available"))]
+df_rating = df[df['rating'] != "Not available"] 
 
 statistic_table = go.Figure(data = go.Table(header = dict(values = ['Attribute', 'Value']),
                     cells = dict(values = [['Min Rating', 'Max Rating', 'Mean Rating', 'Mean MiniSeries Runtime', 'Mean Movies Runtime', 'Mean Series Runtime', 'Mean Shorts Runtime', 'Mean Special Runtime', 'Total Genres', 'Total Languages', 'Total Origin Countries', 'Total Actors'],
-                    [min(pd.to_numeric(df['rating'])), max(pd.to_numeric(df['rating'])), pd.to_numeric(df['rating']).mean(), statistics.mean(pd.to_numeric(df_miniseries['runtime'])), statistics.mean(pd.to_numeric(df_movie['runtime'])), statistics.mean(pd.to_numeric(df_series['runtime'])), statistics.mean(pd.to_numeric(df_short['runtime'])), statistics.mean(pd.to_numeric(df_special['runtime'])), len(genre_list), df['language'].nunique(), df['originCountry'].nunique(), len(cast_list)]])))
+                    [min(pd.to_numeric(df_rating['rating'])), max(pd.to_numeric(df_rating['rating'])), pd.to_numeric(df_rating['rating']).mean(), statistics.mean(pd.to_numeric(df_miniseries['runtime'])), statistics.mean(pd.to_numeric(df_movie['runtime'])), statistics.mean(pd.to_numeric(df_series['runtime'])), statistics.mean(pd.to_numeric(df_short['runtime'])), statistics.mean(pd.to_numeric(df_special['runtime'])), len(genre_list), df['language'].nunique(), df['originCountry'].nunique(), len(cast_list)]])))
 
 statistic_table.write_image("plots/statisticsTable.png")
