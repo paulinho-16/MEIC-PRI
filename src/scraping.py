@@ -13,8 +13,6 @@ logger.disabled = True
 
 datasets_folder = Path("./datasets")
 
-invalid_imdb = []
-
 ######################## Scraping Certificate #########################
 
 df = pd.read_csv(datasets_folder/'cleaning.csv', sep=",", low_memory=True)
@@ -37,7 +35,6 @@ def get_certificates(imdb_id):
         return str(certificates_dict)
     except IMDbDataAccessError:
         print('Invalid IMDB id')
-        invalid_imdb.append(imdb_id)
         return "Not available"
     except Exception:
         print("Exception getting certificates info from " + imdb_id)
@@ -46,10 +43,6 @@ def get_certificates(imdb_id):
 df['certificate'] = df.apply(lambda x: get_certificates(x['imdbID']), axis=1)
 arrCert = df['certificate'].to_numpy()
 df['certificate'] = arrCert
-
-# Store the invalid IMDbs # TODO: Possibly delete the invalid imdb ids
-print(invalid_imdb)
-np.save("invalid.npy", invalid_imdb)
 
 ########################### Scraping Years ############################
 
@@ -312,7 +305,7 @@ def get_cast(imdb_id):
         return "Not available"
     return cast_names
     
-df['cast'] = df.apply(lambda x: get_genres(x['imdbID']) if (x['imdbID'] in cast_nulls['imdbID'].values) else x['cast'], axis=1)
+df['cast'] = df.apply(lambda x: get_cast(x['imdbID']) if (x['imdbID'] in cast_nulls['imdbID'].values) else x['cast'], axis=1)
 
 # Saves to file
 df.to_csv(datasets_folder/"final_netflix_list.csv", index=False)
