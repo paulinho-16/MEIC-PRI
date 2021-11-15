@@ -26,5 +26,8 @@ df = df.drop(columns=['isAdult', 'plot'])
 # Refactor Genres
 df['genres'] = df['genres'].apply(lambda x: [i for i in x.split(",")])
 
+# Delete Invalid IMDb IDs
+df = df.drop(df[(df['imdbID'] == "tt13695490") | (df['imdbID'] == "tt10567720")].index)
+
 # Save the cleaned data to csv
 df.to_csv(datasets_folder/"cleaning.csv", index=False)
