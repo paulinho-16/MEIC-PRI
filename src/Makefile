@@ -1,16 +1,20 @@
-run:
-    python cleaning.py
-    python scraping.py
-    python exploration.py
+SHELL := bash
+.ONESHELL:
+.SHELLFLAGS := -eu -o pipefail -c
+
+.PHONY: all
+
+all: cleaning scraping exploration
 
 cleaning:
     python cleaning.py
 
-scraping:
+scraping: cleaning
     python scraping.py
 
-exploration:
+exploration: scraping
     python exploration.py
 
 clean:
     rm -rf __pycache__
+    rm plots/

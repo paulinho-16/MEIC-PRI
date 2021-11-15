@@ -11,7 +11,7 @@ datasets_folder = Path("./datasets")
 
 Path("plots/").mkdir(parents=True, exist_ok=True)
 
-df = pd.read_csv(datasets_folder/'cleaning.csv', sep=",", low_memory=True) # TODO: Mudar para final_netflix_list.csv
+df = pd.read_csv(datasets_folder/'final_netflix_list.csv', sep=",", low_memory=True)
 
 # Column 'type' Bar Chart
 fig = plt.figure()
@@ -46,7 +46,7 @@ plt.close(fig)
 
 # Distribution of languages Pie Chart
 df_copy = df.copy()
-df_copy = df_copy[df_copy.language != "-"] # TODO: Trocar por Not available
+df_copy = df_copy[df_copy.language != "Not available"]
 
 ser = df_copy.groupby('language')['language'].count()
 ser = ser.sort_values(ascending=False)
@@ -66,7 +66,7 @@ plt.close(fig)
 
 # Distribution of origin countries Pie Chart
 df_copy = df.copy()
-df_copy = df_copy[df_copy.language != "-"] # TODO: Trocar por Not available
+df_copy = df_copy[df_copy.language != "Not available"] 
 
 ser = df_copy.groupby('originCountry')['originCountry'].count()
 ser = ser.sort_values(ascending=False)
@@ -117,7 +117,7 @@ plt.close(fig)
 
 # Number of people in the cast
 df_copy = df.copy()
-df_copy = df_copy[df_copy.cast != "-"] # TODO: Trocar por Not available
+df_copy = df_copy[df_copy.cast != "Not available"]
 cast = [ast.literal_eval(x) for x in df_copy["cast"]]
 cast = [item for sublist in cast for item in sublist]
 
@@ -144,11 +144,11 @@ plt.savefig('plots/castDistribution.png')
 plt.close(fig)
 
 # Table with generic statistics
-df_series = df.loc[((df['type'] == 'series') & (df['runtime'] != "\\N"))] #TODO: Substituir por Not Available 
-df_movie = df.loc[((df['type'] == 'movie') & (df['runtime'] != "\\N"))]
-df_miniseries = df.loc[((df['type'] == 'miniSeries') & (df['runtime'] != "\\N"))]
-df_short = df.loc[((df['type'] == 'short') & (df['runtime'] != "\\N"))]
-df_special = df.loc[((df['type'] == 'special') & (df['runtime'] != "\\N"))]
+df_series = df.loc[((df['type'] == 'series') & (df['runtime'] != "Not Available"))] 
+df_movie = df.loc[((df['type'] == 'movie') & (df['runtime'] != "Not Available"))]
+df_miniseries = df.loc[((df['type'] == 'miniSeries') & (df['runtime'] != "Not Available"))]
+df_short = df.loc[((df['type'] == 'short') & (df['runtime'] != "Not Available"))]
+df_special = df.loc[((df['type'] == 'special') & (df['runtime'] != "Not Available"))]
 
 statistic_table = go.Figure(data = go.Table(header = dict(values = ['Attribute', 'Value']),
                     cells = dict(values = [['Min Rating', 'Max Rating', 'Mean Rating', 'Mean MiniSeries Runtime', 'Mean Movies Runtime', 'Mean Series Runtime', 'Mean Shorts Runtime', 'Mean Special Runtime', 'Total Genres', 'Total Languages', 'Total Origin Countries', 'Total Actors'],
