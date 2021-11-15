@@ -29,15 +29,13 @@ def get_decade(year):
 df_copy = df.copy()
 df_copy = df_copy.astype({'startYear': str})
 
-df_copy['startYear'] = df_copy['startYear'].apply(lambda x: get_decade(x[:-2]) if x != "Not available" else "Not available")
+df_copy['startYear'] = df_copy['startYear'].apply(lambda x: get_decade(x) if x != "Not available" else "Not available")
 
 df_copy = df_copy[df_copy.startYear != "Not available"]
 df_copy = df_copy[df_copy.rating != "Not available"]
 
 df_copy = df_copy.sort_values('startYear')
 df_copy["rating"] = df_copy["rating"].astype(float)
-
-print(df_copy['startYear'])
 
 fig = plt.figure()
 sns.boxplot(x=df_copy["startYear"], y=df_copy["rating"])
@@ -60,7 +58,7 @@ ser = ser.iloc[[0,1,2,3,4,5,6,7,8,-1]]
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
-ax.pie(ser.values, labels=ser.index, startangle=90, autopct=lambda x:int(x/100.*ser.sum()), pctdistance=0.8, counterclock=False)
+ax.pie(ser.values, labels=ser.index, startangle=90, autopct=lambda x:int(x/100.*ser.sum()+0.1), pctdistance=0.8, counterclock=False)
 ax.legend()
 plt.axis('equal')
 plt.title('Most used languages', y=1.05, fontsize=20)
@@ -70,7 +68,7 @@ plt.close(fig)
 
 # Distribution of origin countries Pie Chart
 df_copy = df.copy()
-df_copy = df_copy[df_copy.language != "Not available"] 
+df_copy = df_copy[df_copy.originCountry != "Not available"] 
 
 ser = df_copy.groupby('originCountry')['originCountry'].count()
 ser = ser.sort_values(ascending=False)
@@ -80,7 +78,7 @@ ser = ser.iloc[[0,1,2,3,4,5,6,7,8,-1]]
 fig = plt.figure()
 ax = fig.add_subplot(111)
 
-ax.pie(ser.values, labels=ser.index, startangle=90, autopct=lambda x:int(x/100.*ser.sum()), pctdistance=0.8, counterclock=False)
+ax.pie(ser.values, labels=ser.index, startangle=90, autopct=lambda x:int(x/100.*ser.sum()+0.1), pctdistance=0.8, counterclock=False)
 ax.legend()
 plt.axis('equal')
 plt.title('Most common origin countries', y=1.05, fontsize=20)
