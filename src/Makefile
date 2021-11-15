@@ -4,21 +4,16 @@ SHELL := /bin/bash
 
 PYTHON = ../env/Scripts/python.exe
 
-# .PHONY: all
+.PHONY: all
 
 all: cleaning scraping exploration
 
 # Data Cleaning
 cleaning:
-	ifeq (,$(wildcard ./datasets/netflix_list.csv))
-		$(error File does not exist!)
-	endif
 	$(PYTHON) cleaning.py
 
 # Data Scraping
-scraping: dataset/cleaning.csv
-
-dataset/cleaning.csv:
+scraping:
 	$(PYTHON) scraping.py
 
 # Data Exploration
@@ -28,4 +23,4 @@ exploration:
 # Remove generated folders
 clean:
 	rm -rf __pycache__
-	rm -rf plots/   
+	rm -rf plots/
