@@ -1,20 +1,31 @@
-SHELL := bash
+SHELL := /bin/bash
 .ONESHELL:
 .SHELLFLAGS := -eu -o pipefail -c
 
-.PHONY: all
+PYTHON = ../env/Scripts/python.exe
+
+# .PHONY: all
 
 all: cleaning scraping exploration
 
+# Data Cleaning
 cleaning:
-    python cleaning.py
+	ifeq (,$(wildcard ./datasets/netflix_list.csv))
+		$(error File does not exist!)
+	endif
+	$(PYTHON) cleaning.py
 
-scraping: cleaning
-    python scraping.py
+# Data Scraping
+scraping: dataset/cleaning.csv
 
-exploration: scraping
-    python exploration.py
+dataset/cleaning.csv:
+	$(PYTHON) scraping.py
 
+# Data Exploration
+exploration:
+	$(PYTHON) exploration.py
+
+# Remove generated folders
 clean:
-    rm -rf __pycache__
-    rm plots/
+	rm -rf __pycache__
+	rm -rf plots/   
