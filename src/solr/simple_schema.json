@@ -1,6 +1,26 @@
 {
 	"add-field-type": [
         {
+            "name":"id",
+            "class":"solr.TextField",
+            "indexAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.LetterTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            },
+            "queryAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.LetterTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            }
+        },
+        {
             "name":"title",
             "class":"solr.TextField",
             "indexAnalyzer":{
@@ -25,7 +45,7 @@
             }
         },
         {
-            "name":"language",
+            "name":"certificate",
             "class":"solr.TextField",
             "indexAnalyzer":{
                 "tokenizer":{
@@ -47,7 +67,7 @@
             }
         },
         {
-            "name":"cast",
+            "name":"lower_clean",
             "class":"solr.TextField",
             "indexAnalyzer":{
                 "tokenizer":{
@@ -55,8 +75,7 @@
                 },
                 "filters":[
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
-                    {"class":"solr.LowerCaseFilterFactory"},
-                    {"class":"solr.ClassicFilterFactory"}
+                    {"class":"solr.LowerCaseFilterFactory"}
                 ]
             },
             "queryAnalyzer":{
@@ -65,8 +84,7 @@
                 },
                 "filters":[
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
-                    {"class":"solr.LowerCaseFilterFactory"},
-                    {"class":"solr.ClassicFilterFactory"}
+                    {"class":"solr.LowerCaseFilterFactory"}
                 ]
             }
         },
@@ -93,27 +111,71 @@
                     {"class":"solr.solr.ManagedSynonymFilterFactory"}
                 ]
             }
+        },
+        {
+            "name":"cast",
+            "class":"solr.TextField",
+            "indexAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"},
+                    {"class":"solr.ClassicFilterFactory"}
+                ]
+            },
+            "queryAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"},
+                    {"class":"solr.ClassicFilterFactory"}
+                ]
+            }
         }
     ],
     "add-field": [
+        {
+            "name": "imdbID",
+            "type": "id",
+            "indexed": true
+        },
         {
             "name": "title",
             "type": "title",
             "indexed": true
         },
         {
-            "name": "language",
-            "type": "language",
+            "name": "certificate",
+            "type": "certificate",
             "indexed": true
         },
         {
-            "name": "cast",
-            "type": "cast",
+            "name": "originCountry",
+            "type": "lower_clean",
+            "indexed": true
+        },
+        {
+            "name": "language",
+            "type": "lower_clean",
             "indexed": true
         },
         {
             "name": "summary",
             "type": "summary",
+            "indexed": true
+        },
+        {
+            "name": "genre",
+            "type": "lower_clean",
+            "indexed": true
+        },
+        {
+            "name": "cast",
+            "type": "cast",
             "indexed": true
         }
     ]
