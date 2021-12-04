@@ -12,6 +12,8 @@ curl -X POST -H 'Content-type:application/json' \
     --data-binary @/data/simple_schema.json \
     http://localhost:8983/solr/shows/schema
 
+sleep 2
+
 # Populate collection
 bin/post -c shows /data/netflix_list.json
 
