@@ -32,7 +32,7 @@
                     "class":"solr.StandardTokenizerFactory"
                 },
                 "filters":[
-                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"2", "maxGramSize":"5", "preserveOriginal":true},
+                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
                     {"class":"solr.EnglishMinimalStemFilterFactory"},
                     {"class":"solr.LowerCaseFilterFactory"},

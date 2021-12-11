@@ -307,5 +307,13 @@ def get_cast(imdb_id):
     
 df['cast'] = df.apply(lambda x: get_cast(x['imdbID']) if (x['imdbID'] in cast_nulls['imdbID'].values) else x['cast'], axis=1)
 
+# Delete ',' and transform string to int in popularRank attribute and then replaces all Not Available by null value
+
+for x in range(0, len(df)):
+    df['popularRank'][x] = (df['popularRank'][x]).replace(',', '')
+    df['popularRank'][x] = int(df['popularRank'][x])
+
+df = df.replace('Not available', np.nan)
+
 # Saves to file
 df.to_csv(datasets_folder/"final_netflix_list.csv", index=False)
