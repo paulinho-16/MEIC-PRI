@@ -120,6 +120,7 @@
                     "class":"solr.StandardTokenizerFactory"
                 },
                 "filters":[ 
+                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
                     {"class":"solr.StopFilterFactory", "words":"stopwords.txt", "ignoreCase":"true"},
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
                     {"class":"solr.LowerCaseFilterFactory"}
@@ -130,6 +131,7 @@
                     "class":"solr.StandardTokenizerFactory"
                 },
                 "filters":[ 
+                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
                     {"class":"solr.StopFilterFactory", "words":"stopwords.txt", "ignoreCase":"true"},
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
                     {"class":"solr.LowerCaseFilterFactory"}
@@ -144,6 +146,7 @@
                     "class":"solr.ClassicTokenizerFactory"
                 },
                 "filters":[
+                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
                     {"class":"solr.ClassicFilterFactory"},
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
                     {"class":"solr.LowerCaseFilterFactory"}
