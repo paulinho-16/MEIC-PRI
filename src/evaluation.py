@@ -8,6 +8,10 @@ from pathlib import Path
 
 qrels_folder = Path("./qrels")
 
+N = 10
+precision = None
+recall = None
+
 # METRICS TABLE
 # Define custom decorator to automatically calculate metric based on key
 metrics = {}
@@ -20,23 +24,37 @@ def ap(results, relevant):
         len([
             doc 
             for doc in results[:idx]
-            if doc['imdbID'] in relevant
+            if doc['imdbID'][0] in relevant
         ]) / idx 
-        for idx in range(1, len(results))
+        for idx in range(1, len(results) + 1)
     ]
+    print(precision_values)
     return sum(precision_values)/len(precision_values)
 
 @metric
-def p10(results, relevant, n=5):
+def precisionAtN(results, relevant, n=N):
     """Precision at N"""
-    print("P100000000000000000000000000000000")
-    print(results)
-    print("-------")
+    print("--------------------------------------")
+    print(len(results))
+    print("--------------------------------------")
     print(relevant)
-    print("----------")
 
-    print(len([doc for doc in results[:n] if doc['imdbID'] in relevant])/n)
-    return len([doc for doc in results[:n] if doc['imdbID'] in relevant])/n
+    global precision
+    precision = len([doc for doc in results[:n] if doc['imdbID'][0] in relevant])/n
+    return precision
+
+@metric
+def recallAtN(results, relevant, n=N):
+    """Recall at N"""
+    global recall
+    recall = len([doc for doc in results[:n] if doc['imdbID'][0] in relevant])/float(len(relevant))
+    return recall
+
+@metric
+def f1AtN(_, __, n=N):
+    """F1 at N"""
+    f1 = 2 * (precision * recall)/(precision + recall)
+    return f1
 
 def calculate_metric(key, results, relevant):
     return metrics[key](results, relevant)
@@ -44,7 +62,9 @@ def calculate_metric(key, results, relevant):
 # Define metrics to be calculated
 evaluation_metrics = {
     'ap': 'Average Precision',
-    'p10': 'Precision at 10 (P@10)'
+    'precisionAtN': f'Precision at {N} (P@{N})',
+    'recallAtN': f'Recall at {N} (R@{N})',
+    'f1AtN': f'F1 at {N} (R@{N})'
 }
 
 def evaluate_query(query_number, query_url):
@@ -73,7 +93,7 @@ def evaluate_query(query_number, query_url):
         len([
             doc 
             for doc in results[:idx]
-            if doc['imdbID'] in relevant
+            if doc['imdbID'][0] in relevant
         ]) / idx 
         for idx, _ in enumerate(results, start=1)
     ]
@@ -81,7 +101,7 @@ def evaluate_query(query_number, query_url):
     recall_values = [
         len([
             doc for doc in results[:idx]
-            if doc['imdbID'] in relevant
+            if doc['imdbID'][0] in relevant
         ]) / len(relevant)
         for idx, _ in enumerate(results, start=1)
     ]
@@ -107,5 +127,5 @@ def evaluate_query(query_number, query_url):
 if __name__ == '__main__':
     # evaluate_query(1, 'http://localhost:8983/solr/shows/query?q=english&q.op=AND&defType=edismax&indent=true&debugQuery=false&qf=language%5E2%20summary&rows=20&tie=1')
     # evaluate_query(2, 'http://localhost:8983/solr/shows/select?defType=edismax&indent=true&q.op=AND&q=title%3ADoing%20originCountry%3A%22United%20States%22%20startYear%3A%5B2017%20TO%202021%5D&tie=1')
-    # evaluate_query(3, 'http://localhost:8983/solr/shows/select?indent=true&q.op=AND&q=rating%3A%5B7%20TO%20*%5D%20startYear%3A%5B2010%20TO%20*%5D%20endYear%3A%5B*%20TO%202020%5D%20episodes%3A%5B10%20TO%20*%5D%20(certificate%3AR%C3%BAssia%20OR%20certificate%3APortugal)&sort=numVotes%20DESC')
+    # evaluate_query(3, 'http://localhost:8983/solr/shows/select?defType=edismax&indent=true&q.op=AND&q=rating%3A%5B7%20TO%20*%5D%20startYear%3A%5B2010%20TO%20*%5D%20endYear%3A%5B*%20TO%202020%5D%20episodes%3A%5B10%20TO%20*%5D%20(certificate%3AR%C3%BAssia%20OR%20certificate%3APortugal)&rows=40&sort=numVotes%20DESC')
     evaluate_query(4, 'http://localhost:8983/solr/shows/select?indent=true&q.op=OR&q=(cast%3A%22DB%22%20cast%3A%22Lesley%20Ann%22%20cast%3A%22jk%22%20cast%3AMatt)%20AND%20genres%3A%22Action%22&rows=30&sort=episodes%20ASC')

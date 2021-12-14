@@ -7,20 +7,18 @@
                 "tokenizer":{
                     "class":"solr.StandardTokenizerFactory"
                 },
-                "filters":[ 
-                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                "filters":[
                     {"class":"solr.LowerCaseFilterFactory"},
-                    {"class":"solr.PatternReplaceCharFilterFactory", "pattern":"([a-z])", "replacement":""}
+                    {"class":"solr.PatternReplaceCharFilterFactory", "pattern":"([a-zA-Z])", "replacement":""}
                 ]
             },
             "queryAnalyzer":{
                 "tokenizer":{
                     "class":"solr.StandardTokenizerFactory"
                 },
-                "filters":[ 
-                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                "filters":[
                     {"class":"solr.LowerCaseFilterFactory"},
-                    {"class":"solr.PatternReplaceCharFilterFactory", "pattern":"([a-z])", "replacement":""}
+                    {"class":"solr.PatternReplaceCharFilterFactory", "pattern":"([a-zA-Z])", "replacement":""}
                 ]
             }
         },
