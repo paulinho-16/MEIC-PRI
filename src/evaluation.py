@@ -8,7 +8,7 @@ from pathlib import Path
 
 qrels_folder = Path("./qrels")
 
-N = 10
+N = 40
 precision = None
 recall = None
 
@@ -24,7 +24,7 @@ def ap(results, relevant):
         len([
             doc 
             for doc in results[:idx]
-            if doc['imdbID'][0] in relevant
+            if doc['imdbID'] in relevant
         ]) / idx 
         for idx in range(1, len(results) + 1)
     ]
@@ -40,14 +40,14 @@ def precisionAtN(results, relevant, n=N):
     print(relevant)
 
     global precision
-    precision = len([doc for doc in results[:n] if doc['imdbID'][0] in relevant])/n
+    precision = len([doc for doc in results[:n] if doc['imdbID'] in relevant])/n
     return precision
 
 @metric
 def recallAtN(results, relevant, n=N):
     """Recall at N"""
     global recall
-    recall = len([doc for doc in results[:n] if doc['imdbID'][0] in relevant])/float(len(relevant))
+    recall = len([doc for doc in results[:n] if doc['imdbID'] in relevant])/float(len(relevant))
     return recall
 
 @metric
@@ -93,7 +93,7 @@ def evaluate_query(query_number, query_url):
         len([
             doc 
             for doc in results[:idx]
-            if doc['imdbID'][0] in relevant
+            if doc['imdbID'] in relevant
         ]) / idx 
         for idx, _ in enumerate(results, start=1)
     ]
@@ -101,7 +101,7 @@ def evaluate_query(query_number, query_url):
     recall_values = [
         len([
             doc for doc in results[:idx]
-            if doc['imdbID'][0] in relevant
+            if doc['imdbID'] in relevant
         ]) / len(relevant)
         for idx, _ in enumerate(results, start=1)
     ]
@@ -127,5 +127,5 @@ def evaluate_query(query_number, query_url):
 if __name__ == '__main__':
     # evaluate_query(1, 'http://localhost:8983/solr/shows/query?q=english&q.op=AND&defType=edismax&indent=true&debugQuery=false&qf=language%5E2%20summary&rows=20&tie=1')
     # evaluate_query(2, 'http://localhost:8983/solr/shows/select?defType=edismax&indent=true&q.op=AND&q=title%3ADoing%20originCountry%3A%22United%20States%22%20startYear%3A%5B2017%20TO%202021%5D&tie=1')
-    # evaluate_query(3, 'http://localhost:8983/solr/shows/select?defType=edismax&indent=true&q.op=AND&q=rating%3A%5B7%20TO%20*%5D%20startYear%3A%5B2010%20TO%20*%5D%20endYear%3A%5B*%20TO%202020%5D%20episodes%3A%5B10%20TO%20*%5D%20(certificate%3AR%C3%BAssia%20OR%20certificate%3APortugal)&rows=40&sort=numVotes%20DESC')
+    # evaluate_query(3, 'http://localhost:8983/solr/shows/select?defType=edismax&indent=true&q.op=AND&q=rating%3A%5B7%20TO%20*%5D%20startYear%3A%5B2010%20TO%20*%5D%20endYear%3A%5B*%20TO%202020%5D%20(certificate%3AR%C3%BAssia%20OR%20certificate%3APortugal)&rows=40&sort=numVotes%20DESC&tie=1')
     evaluate_query(4, 'http://localhost:8983/solr/shows/select?indent=true&q.op=OR&q=(cast%3A%22DB%22%20cast%3A%22Lesley%20Ann%22%20cast%3A%22jk%22%20cast%3AMatt)%20AND%20genres%3A%22Action%22&rows=30&sort=episodes%20ASC')
