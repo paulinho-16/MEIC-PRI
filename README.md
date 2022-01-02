@@ -37,6 +37,7 @@ From the **src** folder of the repository:
 - prepares Solr and starts running it in the address http://localhost:8983/
 
 5. **Clean Cache**: Empty the Python cache folders (\_\_pycache\_\_) and the **plots** folder
+> `make clean`
 
 ## User Interface for the Search System
 
