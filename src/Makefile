@@ -20,13 +20,10 @@ scraping:
 exploration:
 	$(PYTHON) exploration.py
 
-docker:
-	docker build . -t meic_solr
-	docker run -p 8983:8983 --name solr meic_solr
-
-solr:
-	docker exec solr bin/post -c courses /data/simple_schema.json
-	docker exec solr bin/post -c courses /data/query1.json
+# Start Solr
+run_solr:
+	docker build ./solr -t solr
+	docker run -p 8983:8983 --name solr solr
 
 # Remove generated folders
 clean:

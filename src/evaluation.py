@@ -1,12 +1,11 @@
 import matplotlib.pyplot as plt
 from sklearn.metrics import PrecisionRecallDisplay
 import numpy as np
-import json
 import requests
 import pandas as pd
 from pathlib import Path
 
-qrels_folder = Path("./qrels")
+evaluation_folder = Path("./evaluation")
 
 N = 40
 precision = None
@@ -68,7 +67,7 @@ evaluation_metrics = {
 }
 
 def evaluate_query(query_number, query_url):
-    qrels_file = qrels_folder/f'qrels_{query_number}.txt'
+    qrels_file = evaluation_folder/f'qrels_{query_number}.txt'
 
     # Read qrels to extract relevant documents
     relevant = list(map(lambda el: el.strip(), open(qrels_file).readlines()))
@@ -84,7 +83,7 @@ def evaluate_query(query_number, query_url):
         ]
     )
 
-    with open(f'results_query{query_number}.tex','w') as tf:
+    with open(f'{evaluation_folder}/results_query{query_number}.tex','w') as tf:
         tf.write(df.to_latex())
     
     # PRECISION-RECALL CURVE
@@ -122,7 +121,7 @@ def evaluate_query(query_number, query_url):
 
     disp = PrecisionRecallDisplay([precision_recall_match.get(r) for r in recall_values], recall_values)
     disp.plot()
-    plt.savefig(f'precision_recall_query{query_number}.pdf')
+    plt.savefig(f'{evaluation_folder}/precision_recall_query{query_number}.pdf')
 
 if __name__ == '__main__':
     # evaluate_query(1, 'http://localhost:8983/solr/shows/query?q=english&q.op=AND&defType=edismax&indent=true&debugQuery=false&qf=language%5E2%20summary&rows=20&tie=1')
