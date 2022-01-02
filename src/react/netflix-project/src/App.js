@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form';
 import NumericInput from 'react-numeric-input';
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import Multiselect from 'multiselect-react-dropdown';
-require('./dropdown.js');
+// require('./dropdown.js');
 
 
 var state = {
@@ -24,11 +24,12 @@ function App() {
       <div>
         <Form>
           <Form.Group className="mb-3" controlId="formSearch">
-            <Form.Label>Search</Form.Label>
+            <Form.Label>Search: </Form.Label>
             <Form.Control type="string" placeholder="Search here..." />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="typeSearch">
+            <Form.Label>Type: </Form.Label>
             {['animation', 'miniSeries', 'movie', 'series', 'short', 'special'].map((type) => (
               <div key={`${type}`} className="mb-3">
                 <Form.Check
@@ -41,36 +42,42 @@ function App() {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="startYearSearch">
+            <Form.Label>Start Year: </Form.Label>
             <NumericInput className="form-control" style={false} min={0} max={3000} />
             TO
             <NumericInput className="form-control" style={false} min={0} max={3000} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="endYearSearch">
+            <Form.Label>End Year: </Form.Label>
             <NumericInput className="form-control" style={false} min={0} max={3000} />
             TO
             <NumericInput className="form-control" style={false} min={0} max={3000} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="episodesSearch">
+            <Form.Label>Number Episodes: </Form.Label>
             <NumericInput className="form-control" style={false} min={0} max={10000} />
             TO
             <NumericInput className="form-control" style={false} min={0} max={10000} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="runtimeSearch">
+            <Form.Label>Runtime: </Form.Label>
             <NumericInput className="form-control" style={false} min={0} max={10000} />
             TO
             <NumericInput className="form-control" style={false} min={0} max={10000} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="ratingSearch">
+            <Form.Label>Rating: </Form.Label>
             <NumericInput className="form-control" style={false} min={0} max={10} />
             TO
             <NumericInput className="form-control" style={false} min={0} max={10} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="numVotesSearch">
+            <Form.Label>Num Votes: </Form.Label>
             <NumericInput className="form-control" style={false} min={0} max={10000000} />
             TO
             <NumericInput className="form-control" style={false} min={0} max={10000000} />
