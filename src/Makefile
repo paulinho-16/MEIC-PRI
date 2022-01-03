@@ -25,6 +25,10 @@ run_solr:
 	docker build ./solr -t solr
 	docker run -p 8983:8983 --name solr solr
 
+# Retrieval Evaluation
+evaluation:
+	$(PYTHON) evaluation.py
+
 # Remove generated folders
 clean:
 	rm -rf __pycache__

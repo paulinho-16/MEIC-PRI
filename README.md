@@ -36,12 +36,18 @@ From the **src** folder of the repository:
 > `make run_solr`
 - prepares Solr and starts running it in the address http://localhost:8983/
 
-5. **Clean Cache**: Empty the Python cache folders (\_\_pycache\_\_) and the **plots** folder
+5. **Retrieval Evaluation**: Evaluate the search system based on the relevant results retrieved by some queries
+> `make evaluation`
+- outputs a LaTeX table with the values of different metrics applied to the results and a Precision-Recall curve in the **evaluation** folder
+
+6. **Clean Cache**: Empty the Python cache folders (\_\_pycache\_\_) and the **plots** folder
 > `make clean`
 
 ## User Interface for the Search System
 
 ### Run the Interface:
+
+From the **src/interface** folder of the repository:
 
 ```properties
 1. npm install
