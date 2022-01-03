@@ -3,35 +3,34 @@ import './App.css';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import NumericInput from 'react-numeric-input';
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import Multiselect from 'multiselect-react-dropdown';
 // require('./dropdown.js');
-
+import SearchForm from './components/SearchForm';
+import SearchResults from './components/SearchResults';
+import { useState, useRef } from 'react';
 
 var state = {
   options: [{ name: 'animation', id: 1 }, { name: 'miniSeries', id: 2 }, { name: 'movie', id: 3 }, { name: 'series', id: 4 }, { name: 'short', id: 5 }, { name: 'special', id: 6 }]
 };
 
 function App() {
+  const [searchText, setSearchText] = useState('')
+  const [results, setResults] = useState(['ola', 'adeus'])
   return (
     <div className="App">
       <header className="App-header">
         <h1>Netflix</h1>
       </header>
       <div>
-        <Form>
-          <Form.Group className="mb-3" controlId="formSearch">
-            <Form.Label>Search: </Form.Label>
-            <Form.Control type="string" placeholder="Search here..." />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="typeSearch">
+        <SearchForm />
+        
+          
+          {/* <Form.Group className="mb-3" controlId="typeSearch">
             <Form.Label>Type: </Form.Label>
             {['animation', 'miniSeries', 'movie', 'series', 'short', 'special'].map((type) => (
-              <div key={`${type}`} className="mb-3">
+              <div key={type} className="mb-3">
                 <Form.Check
                   type="checkbox"
                   id={`${type}`}
@@ -81,22 +80,21 @@ function App() {
             <NumericInput className="form-control" style={false} min={0} max={10000000} />
             TO
             <NumericInput className="form-control" style={false} min={0} max={10000000} />
-          </Form.Group>
+          </Form.Group> */}
 
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
+          {/* TODO: Replace by glass icon */}
 
-        <Dropdown className="d-inline mx-2" autoClose={false}>
+        <SearchResults results={results}/>
+
+        {/* <Dropdown className="d-inline mx-2" autoClose={false}>
           <Dropdown.Toggle id="dropdown-autoclose-false">
             Manual Close
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
             {['animation', 'miniSeries', 'movie', 'series', 'short', 'special'].map((type) => (
-              <Dropdown.Item href="#">
-                <div key={`${type}`} className="mb-3">
+              <Dropdown.Item href="#" key={type}>
+                <div className="mb-3">
                   <Form.Check
                     type="checkbox"
                     id={`${type}`}
@@ -106,13 +104,13 @@ function App() {
               </Dropdown.Item>
             ))}
           </Dropdown.Menu>
-        </Dropdown>
+        </Dropdown> */}
 
-        <Multiselect
+        {/* <Multiselect
           options={state.options} // Options to display in the dropdown
           selectedValues={state.selectedValue} // Preselected value to persist in dropdown
           displayValue="name" // Property name to display in the dropdown options
-        />
+        /> */}
 
       <div id="dropdownCont">
 
