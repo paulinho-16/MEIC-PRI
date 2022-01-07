@@ -13,18 +13,14 @@ class SearchForm extends React.Component {
     handleSearch = () => {
         const searchText = this.searchTextRef.current.value
         if (searchText === '') return
-        console.log(searchText)
-        let uri = `http://localhost:8983/solr/shows/select?indent=true&q.op=OR&q=title:${searchText} language:${searchText} summary:${searchText}`
-        console.log(uri)
+        let uri = `/solr/shows/select?indent=true&q.op=OR&q=title:"${searchText}" language:"${searchText}" summary:"${searchText}"&rows=6300`
         let uri_encoded = encodeURI(uri);
-        fetch(uri_encoded, {mode: 'cors'}).then((data) => {
+
+        fetch(uri_encoded).then((data) => {
             data.json().then((resp) => {
-                console.warn("resp", resp)
+                this.props.updateResults(resp['response']['docs'])
             })
         })
-
-        // TODO: ver qual a melhor forma de fazer queries ao Solr
-        // fetch é bloqueado por falta de CORS
     }
 
     render() {
