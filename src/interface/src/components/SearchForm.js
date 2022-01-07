@@ -12,12 +12,16 @@ class SearchForm extends React.Component {
 
     handleSearch = () => {
         const searchText = this.searchTextRef.current.value
-        if (searchText === '') return
-        let uri = `/solr/shows/select?indent=true&q.op=OR&q=title:"${searchText}" language:"${searchText}" summary:"${searchText}"&rows=6300`
+        let uri = null
+        if (searchText === '') // TODO: recolher apenas alguns de todos os resultados (paginação?)
+            uri = `/solr/shows/select?indent=true&q.op=OR&q=*:*&rows=20`
+        else
+            uri = `/solr/shows/select?indent=true&q.op=OR&q=title:"${searchText}" language:"${searchText}" summary:"${searchText}"&rows=6216`
         let uri_encoded = encodeURI(uri);
 
         fetch(uri_encoded).then((data) => {
             data.json().then((resp) => {
+                console.log(resp)
                 this.props.updateResults(resp['response']['docs'])
             })
         })
@@ -26,8 +30,8 @@ class SearchForm extends React.Component {
     render() {
         return (
             <Form className="search-form">
-                <SearchBar ref={this.searchTextRef}/>
-                <SearchButton handleFunction={this.handleSearch}/>
+                <SearchBar ref={this.searchTextRef} />
+                <SearchButton handleFunction={this.handleSearch} />
             </Form>
         )
     }
