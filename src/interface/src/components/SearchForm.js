@@ -21,7 +21,6 @@ class SearchForm extends React.Component {
 
         fetch(uri_encoded).then((data) => {
             data.json().then((resp) => {
-                console.log(resp)
                 this.props.updateResults(resp['response']['docs'])
             })
         })

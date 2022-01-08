@@ -1,3 +1,7 @@
+body {
+    background: #e5e5e5;
+}
+
 .App {
     display: flex;
     justify-content: center;
@@ -27,4 +31,38 @@
     align-items: center;
     flex-direction: column;
     margin-top: 1rem;
+}
+
+.card {
+    width: 20rem;
+}
+
+.card-body {
+    padding: 3rem 0 !important;
+}
+
+.card-text {
+    font-size: .9rem;
+    padding: 0.4rem 1.9rem;
+}
+
+.card:hover {
+    box-shadow: 5px 10px 20px 1px rgba(0,0,0,0.253) !important;
+}
+
+.container-fluid .row {
+    padding-top: 4rem;
+}
+
+.card-img-top {
+    transform: scale(1);
+    transition: transform 0.5s ease;
+}
+
+.card-img-top:hover {
+    transform: scale(1.2);
+}
+
+.overflow {
+    overflow: hidden;
 }

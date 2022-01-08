@@ -29,13 +29,12 @@ class App extends React.Component {
 
     render() {
         return (
-            <div className="App">
+            <div className="App" style={{ background: this.state.results.length > 0 ? 'radial-gradient(#e5e5e5, #ffff, #e5e5e5)' : 'none' }}>
                 <header className="App-header">
                     <h1>Netflix</h1>
                 </header>
                 <div>
                     <SearchForm updateResults={this.updateResults} />
-
 
                     {/* <Form.Group className="mb-3" controlId="typeSearch">
                 <Form.Label>Type: </Form.Label>
