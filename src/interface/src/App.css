@@ -153,6 +153,10 @@ body {
     text-align: justify;
     text-justify: inter-word;
     padding-bottom: 2%;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 10;
+    -webkit-box-orient: vertical;
 }
 
 .popup-title {
