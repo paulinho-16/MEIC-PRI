@@ -1,6 +1,5 @@
 body {
     background: #e5e5e5;
-    padding: 5%;
 }
 
 .App {
@@ -71,7 +70,7 @@ body {
 /* POPUP */
 
 /* The Modal (background) */
-.modal {
+.showModal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
@@ -86,7 +85,7 @@ body {
   }
   
   /* Modal Content */
-  .modal-content {
+  .showModal-content {
     position: relative;
     background-color: #fefefe;
     margin: auto;
@@ -112,17 +111,17 @@ body {
     to {top:0; opacity:1}
   }
   
-  .modal-header {
+  .showModal-header {
     padding: 2px 16px;
     background-color: #E50914;
     color: white;
   }
   
-  .modal-body {
+  .showModal-body {
     margin: 2%;    
 }
   
-  .modal-footer {
+  .showModal-footer {
     padding: 0px 16px;
     background-color: #E50914;
     color: white;
