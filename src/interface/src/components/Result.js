@@ -33,8 +33,8 @@ export default class Result extends Component {
                         <p className='card-text text-secondary'>
                             {this.props.result['summary']}
                         </p>
-                        <a href='#' className='btn btn-outline-success'>More info</a>
-                        <button className="btn btn-primary" onClick={this.showModal}>Click me</button>
+                        <a href='#' className='btn btn-outline-danger'>More info</a>
+                        <button className="btn btn-primary" onClick={this.showModal}>More info</button>
                     </div>
                 </div>
 
