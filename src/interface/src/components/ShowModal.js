@@ -10,6 +10,42 @@ export default class ShowModal extends Component {
     }
 
     render() {
+        var endYear;
+        if (this.props.result["endYear"] && this.props.result["type"] === "series") {
+            endYear = <tr><th>End Year:</th><td>{this.props.result["endYear"]}</td></tr>;
+        }
+        else if (this.props.result["type"] === "series") {
+            endYear = <tr><th>End Year:</th><td>-</td></tr>;
+        }
+        else {
+            endYear = ""
+        }
+
+        var episodes;
+        if (this.props.result["episodes"] && (this.props.result["type"] === "series" || this.props.result["type"] === "miniSeries" || this.props.result["type"] === "movie")) {
+            episodes = <tr><th>Episodes:</th><td>{this.props.result["episodes"]}</td></tr>;
+        }
+        else if (this.props.result["episodes"] === "series" || this.props.result["episodes"] === "miniSeries") {
+            episodes = <tr><th>Episodes:</th><td>-</td></tr>;
+        }
+        else {
+            episodes = "";
+        }
+
+        var cast;
+        if (this.props.result["cast"]) {
+            let c = this.props.result["cast"];
+            c = c.substr(1, c.length - 2);
+            console.log(c);
+            cast = <tr><th>Cast:</th><td>{c}</td></tr>;
+        }
+        else {
+            cast = "";
+        }
+
+        var language;
+
+
         return (
             <Modal show={this.props.show} onHide={this.props.hide} className='showModal'>
                 <Modal.Header closeButton className='showModal-header'>
@@ -26,7 +62,7 @@ export default class ShowModal extends Component {
                     </div>
                     <div className="popup-info">
                         <div>
-                            <Button variant="danger" className='popular-rank' >
+                            <Button title="Polpular Rank" variant="danger" className='popular-rank' >
                                 <span variant="danger"> {this.props.result['popularRank']}</span>
                             </Button>
 
@@ -62,14 +98,13 @@ export default class ShowModal extends Component {
                                     <th>Year of Release:</th>
                                     <td>{this.props.result['startYear']}</td>
                                 </tr>
-                                <tr>
-                                    <th>End Year:</th>
-                                    <td>{this.props.result['endYear']}</td>
-                                </tr>
+                                {endYear}
+                                {episodes}
                                 <tr>
                                     <th>Type:</th>
                                     <td>{this.props.result['type']}</td>
                                 </tr>
+                                {cast}
                             </tbody>
                         </table>
                     </div>

@@ -34,7 +34,8 @@
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
                     {"class":"solr.EnglishMinimalStemFilterFactory"},
                     {"class":"solr.LowerCaseFilterFactory"},
-                    {"class":"solr.KStemFilterFactory"}
+                    {"class":"solr.KStemFilterFactory"},
+                    {"class":"solr.SynonymFilterFactory", "synonyms":"synonyms.txt", "expand":"true"}
                 ]
             },
             "queryAnalyzer":{
@@ -45,6 +46,7 @@
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
                     {"class":"solr.EnglishMinimalStemFilterFactory"},
                     {"class":"solr.LowerCaseFilterFactory"},
+                    {"class":"solr.SynonymFilterFactory", "synonyms":"synonyms.txt", "expand":"true"},
                     {"class":"solr.KStemFilterFactory"}
                 ]
             }
