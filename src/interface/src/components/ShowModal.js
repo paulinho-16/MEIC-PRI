@@ -21,11 +21,22 @@ export default class ShowModal extends Component {
             endYear = ""
         }
 
+        var startYear;
+        if (this.props.result["startYear"] && (this.props.result["type"] === "series" || this.props.result["type"] === "miniSeries")) {
+            startYear = <tr><th>Year of Release:</th><td>{this.props.result["startYear"]}</td></tr>;
+        }
+        else if (this.props.result["type"] === "series" || this.props.result["type"] === "miniSeries") {
+            startYear = <tr><th>Year of Release:</th><td>-</td></tr>;
+        }
+        else {
+            startYear = ""
+        }
+
         var episodes;
         if (this.props.result["episodes"] && (this.props.result["type"] === "series" || this.props.result["type"] === "miniSeries" || this.props.result["type"] === "movie")) {
             episodes = <tr><th>Episodes:</th><td>{this.props.result["episodes"]}</td></tr>;
         }
-        else if (this.props.result["episodes"] === "series" || this.props.result["episodes"] === "miniSeries") {
+        else if (this.props.result["type"] === "series" || this.props.result["type"] === "miniSeries") {
             episodes = <tr><th>Episodes:</th><td>-</td></tr>;
         }
         else {
@@ -36,7 +47,6 @@ export default class ShowModal extends Component {
         if (this.props.result["cast"]) {
             let c = this.props.result["cast"];
             c = c.substr(1, c.length - 2);
-            console.log(c);
             cast = <tr><th>Cast:</th><td>{c}</td></tr>;
         }
         else {
@@ -44,7 +54,28 @@ export default class ShowModal extends Component {
         }
 
         var language;
+        if (this.props.result['language']) {
+            language = <tr><th>Language:</th><td>{this.props.result['language']}</td></tr>
+        }
+        else {
+            language = ""
+        }
 
+        var originCountry;
+        if (this.props.result['originCountry']) {
+            originCountry = <tr><th>Origin Country:</th><td>{this.props.result['originCountry']}</td></tr>
+        }
+        else {
+            originCountry = ""
+        }
+
+        var runtime;
+        if (this.props.result['runtime']) {
+            runtime = <tr><th>Runtime:</th><td>{this.props.result['runtime']}</td></tr>
+        }
+        else {
+            runtime = ""
+        }
 
         return (
             <Modal show={this.props.show} onHide={this.props.hide} className='showModal'>
@@ -82,22 +113,10 @@ export default class ShowModal extends Component {
                         </div>
                         <table>
                             <tbody>
-                                <tr>
-                                    <th>Language:</th>
-                                    <td>{this.props.result['language']}</td>
-                                </tr>
-                                <tr>
-                                    <th>Origin Country:</th>
-                                    <td>{this.props.result['originCountry']}</td>
-                                </tr>
-                                <tr>
-                                    <th>Runtime:</th>
-                                    <td>{this.props.result['runtime']}</td>
-                                </tr>
-                                <tr>
-                                    <th>Year of Release:</th>
-                                    <td>{this.props.result['startYear']}</td>
-                                </tr>
+                                {language}
+                                {originCountry}
+                                {runtime}
+                                {startYear}
                                 {endYear}
                                 {episodes}
                                 <tr>
