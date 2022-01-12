@@ -12,7 +12,7 @@ COPY query4.json /data/query4.json
 
 COPY schema.json /data/schema.json
 
-# COPY synonyms.txt /data/synonyms.txt
+COPY synonyms.txt /data/mysynonyms.txt
 
 COPY startup.sh /scripts/startup.sh
 

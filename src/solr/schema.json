@@ -30,12 +30,12 @@
                     "class":"solr.StandardTokenizerFactory"
                 },
                 "filters":[
+                    {"class":"solr.SynonymGraphFilterFactory", "expand":"true", "ignoreCase":"true", "synonyms":"synonyms.txt"},
                     {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
                     {"class":"solr.EnglishMinimalStemFilterFactory"},
                     {"class":"solr.LowerCaseFilterFactory"},
-                    {"class":"solr.KStemFilterFactory"},
-                    {"class":"solr.SynonymFilterFactory", "synonyms":"synonyms.txt", "expand":"true"}
+                    {"class":"solr.KStemFilterFactory"}
                 ]
             },
             "queryAnalyzer":{
@@ -43,10 +43,10 @@
                     "class":"solr.StandardTokenizerFactory"
                 },
                 "filters":[
+                    {"class":"solr.SynonymGraphFilterFactory", "expand":"true", "ignoreCase":"true", "synonyms":"synonyms.txt"},
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
                     {"class":"solr.EnglishMinimalStemFilterFactory"},
                     {"class":"solr.LowerCaseFilterFactory"},
-                    {"class":"solr.SynonymFilterFactory", "synonyms":"synonyms.txt", "expand":"true"},
                     {"class":"solr.KStemFilterFactory"}
                 ]
             }
