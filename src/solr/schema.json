@@ -165,7 +165,9 @@
             "name": "title",
             "type": "title",
             "indexed": true,
-            "stored": true
+            "stored": true,
+            "multiValued":"true",
+            "omitNorms":"true"
         },
         {
             "name": "popularRank",

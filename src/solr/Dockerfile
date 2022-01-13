@@ -14,6 +14,8 @@ COPY schema.json /data/schema.json
 
 COPY synonyms.txt /data/mysynonyms.txt
 
+COPY solrconfig.xml /data/config.xml
+
 COPY startup.sh /scripts/startup.sh
 
 ENTRYPOINT ["/scripts/startup.sh"]

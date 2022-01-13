@@ -10,6 +10,10 @@ sleep 2
 # Define Synonyms 
 cat /data/mysynonyms.txt >> /var/solr/data/shows/conf/synonyms.txt
 
+cat /data/config.xml > /var/solr/data/shows/conf/solrconfig.xml
+
+cat /var/solr/data/shows/conf/solrconfig.xml
+
 # Schema definition via API
 curl -X POST -H 'Content-type:application/json' \
     --data-binary @/data/schema.json \
