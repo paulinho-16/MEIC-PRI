@@ -6,7 +6,6 @@ import ListGroup from 'react-bootstrap/ListGroup';
 export default class ShowModal extends Component {
     constructor(props) {
         super(props)
-        this.genres = this.props.result['genres'].replace(/[^a-zA-Z ]/g, "").split(" ")
     }
 
     render() {
@@ -46,7 +45,7 @@ export default class ShowModal extends Component {
         var cast;
         if (this.props.result["cast"]) {
             let c = this.props.result["cast"];
-            c = c.substr(1, c.length - 2);
+            c = String(c).substr(1, c.length - 2);
             cast = <tr><th>Cast:</th><td>{c}</td></tr>;
         }
         else {
@@ -77,6 +76,8 @@ export default class ShowModal extends Component {
             runtime = ""
         }
 
+        this.genres = String(this.props.result['genres']).replace(/[^a-zA-Z ]/g, "").split(" ")
+
         return (
             <Modal show={this.props.show} onHide={this.props.hide} className='showModal'>
                 <Modal.Header closeButton className='showModal-header'>
@@ -86,15 +87,14 @@ export default class ShowModal extends Component {
                 <Modal.Body className='showModal-body'>
                     <div className='popup-image'>
                         <img src={this.props.result['imageURL']} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
-                        <div className='imdb-rating-box'>
-                            Rating: <span className='imdb-rating-text'>{this.props.result['rating']}</span>
+                        <div className='imdb-rating-box'>Rating:<span className='imdb-rating-text'>{this.props.result['rating']}</span>
                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png" className='imdb-rating' alt="IMDb Rating" />
                         </div>
                     </div>
                     <div className="popup-info">
                         <div>
                             <Button title="Polpular Rank" variant="danger" className='popular-rank' >
-                                <span variant="danger"> {this.props.result['popularRank']}</span>
+                                <span variant="danger">{this.props.result['popularRank']}</span>
                             </Button>
 
                         </div>
