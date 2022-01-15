@@ -90,7 +90,7 @@ export default class ShowModal extends Component {
 
         var numVotes;
         if (this.props.result['numVotes']) {
-            numVotes = <tr><th>Number of votes:</th><td>{this.props.result['numVotes']}</td></tr>
+            numVotes = <tr><th>Number of Votes:</th><td>{this.props.result['numVotes']}</td></tr>
         }
         else {
             numVotes = ""
@@ -223,7 +223,8 @@ export default class ShowModal extends Component {
                     </Tab>
                 </Tabs>
                 <Modal.Footer className='showModal-footer'>
-                    <p>Footer</p>
+                    <p> </p> 
+                    {/* &zwnj; */}
                 </Modal.Footer>
             </Modal>
         )
