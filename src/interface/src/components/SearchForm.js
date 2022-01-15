@@ -16,7 +16,15 @@ class SearchForm extends React.Component {
             startYearInitial: null || '',
             startYearFinal: null || '',
             endYearInitial: null || '',
-            endYearFinal: null || ''
+            endYearFinal: null || '',
+            numEpisodesInitial: null || '',
+            numEpisodesFinal: null || '',
+            runtimeInitial: null || '',
+            runtimeFinal: null || '',
+            ratingInitial: null || '',
+            ratingFinal: null || '',
+            numVotesInitial: null || '',
+            numVotesFinal: null || ''
         };
     }
 
@@ -43,7 +51,48 @@ class SearchForm extends React.Component {
                 endYearFinal: val
             });
         }
+        if (field === "numEpisodesInitial"){
+            this.setState({
+                numEpisodesInitial: val
+            });
+        }
+        if (field === "numEpisodesFinal"){
+            this.setState({
+                numEpisodesFinal: val
+            });
+        }
+        if (field === "runtimeInitial"){
+            this.setState({
+                runtimeInitial: val
+            });
+        }
+        if (field === "runtimeFinal"){
+            this.setState({
+                runtimeFinal: val
+            });
+        }
 
+        if (field === "ratingInitial"){
+            this.setState({
+                ratingInitial: val
+            });
+        }
+        if (field === "ratingFinal"){
+            this.setState({
+                ratingFinal: val
+            });
+        }
+        
+        if (field === "numVotesInitial"){
+            this.setState({
+                numVotesInitial: val
+            });
+        }
+        if (field === "numVotesFinal"){
+            this.setState({
+                numVotesFinal: val
+            });
+        }
         
         console.log(this.state.startYearInitial)
     }
@@ -52,7 +101,7 @@ class SearchForm extends React.Component {
         const searchText = this.searchTextRef.current.value        
         const show_types = this.state.types.filter((_, index) => this.state.checked[index]);
 
-        if (show_types.length == 0) {
+        if (show_types.length === 0) {
             this.props.updateResults([])
             return
         }
@@ -88,9 +137,61 @@ class SearchForm extends React.Component {
         {
             uri = uri + ` AND endYear:[1 TO ${this.state.endYearFinal}]`
         }
+
+        if (this.state.numEpisodesInitial > 0 & this.state.numEpisodesFinal >0 )
+        {
+            uri = uri + ` AND episodes:[${this.state.numEpisodesInitial} TO ${this.state.numEpisodesFinal}]`
+        }
+        else if (this.state.numEpisodesInitial > 0)
+        {
+            uri = uri + ` AND episodes:[${this.state.numEpisodesInitial} TO 10000]`
+        }
+        else if (this.state.numEpisodesFinal > 0 )
+        {
+            uri = uri + ` AND episodes:[1 TO ${this.state.numEpisodesFinal}]`
+        }
+
+        if (this.state.runtimeInitial > 0 & this.state.runtimeFinal > 0 )
+        {
+            uri = uri + ` AND runtime:[${this.state.runtimeInitial} TO ${this.state.runtimeFinal}]`
+        }
+        else if (this.state.runtimeInitial > 0)
+        {
+            uri = uri + ` AND runtime:[${this.state.runtimeInitial} TO 10000]`
+        }
+        else if (this.state.runtimeFinal > 0 )
+        {
+            uri = uri + ` AND runtime:[0 TO ${this.state.runtimeFinal}]`
+        }
+
+        if (this.state.ratingInitial > 0.0 & this.state.ratingFinal > 0.0 )
+        {
+            uri = uri + ` AND rating:[${this.state.ratingInitial} TO ${this.state.ratingFinal}]`
+        }
+        else if (this.state.ratingInitial > 0.0)
+        {
+            uri = uri + ` AND rating:[${this.state.ratingInitial} TO 10]`
+        }
+        else if (this.state.ratingFinal > 0.0 )
+        {
+            uri = uri + ` AND rating:[0 TO ${this.state.ratingFinal}]`
+        }
+
+        if (this.state.numVotesInitial > 0.0 & this.state.numVotesFinal > 0.0 )
+        {
+            uri = uri + ` AND numVotes:[${this.state.numVotesInitial} TO ${this.state.numVotesFinal}]`
+        }
+        else if (this.state.numVotesInitial > 0.0)
+        {
+            uri = uri + ` AND numVotes:[${this.state.numVotesInitial} TO 1000000]`
+        }
+        else if (this.state.numVotesFinal > 0.0 )
+        {
+            uri = uri + ` AND numVotes:[0 TO ${this.state.numVotesFinal}]`
+        } 
   
         for (var i = 0; i < show_types.length; i++) {
-            if (i == 0)
+            if (i === 0)
                 uri += ` AND (type:"${show_types[i]}"`
             else
                 uri += ` type:"${show_types[i]}"`
@@ -98,13 +199,26 @@ class SearchForm extends React.Component {
 
         uri += ')'
         
-        uri += '&rows=100'
+        uri += '&rows=100&sort=popularRank ASC'
 
         console.log(uri)
 
         let uri_encoded = encodeURI(uri);
 
         console.log(uri_encoded)
+
+        let spell_check_uri = encodeURI(`/solr/shows/spell?q=title:${searchText}&amp;spellcheck=true&amp;spellcheck.count=10&amp;`)
+
+        fetch(spell_check_uri).then((data) => {
+            data.json().then((resp) => {
+                try {
+                    this.props.updateSpellCheck(resp['spellcheck']['suggestions'][1]['suggestion'])
+                }
+                catch {
+                    this.props.updateSpellCheck([])
+                }
+            })
+        })
 
         fetch(uri_encoded).then((data) => {
             data.json().then((resp) => {
@@ -162,18 +276,18 @@ class SearchForm extends React.Component {
                         <div>
                             <Form.Label>Number of Episodes:</Form.Label>
                             <div>
-                                <input type="number" min={0} max={10000} style={{marginRight:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
+                                <input type="number" value={this.state.numEpisodesInitial} onChange={evt => this.updateInputValue(evt,"numEpisodesInitial")} min={0} max={10000} style={{marginRight:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
                                 TO
-                                <input type="number" min={0} max={10000} style={{marginLeft:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
+                                <input type="number" value={this.state.numEpisodesFinal} onChange={evt => this.updateInputValue(evt,"numEpisodesFinal")} min={0} max={10000} style={{marginLeft:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
                             </div>
                         </div>
 
                         <div>
                             <Form.Label>Runtime:</Form.Label>
                             <div>
-                                <input type="number" min={0} max={10000} style={{marginRight:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
+                                <input type="number" value={this.state.runtimeInitial} onChange={evt => this.updateInputValue(evt,"runtimeInitial")} min={0} max={10000} style={{marginRight:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
                                 TO
-                                <input type="number" min={0} max={10000} style={{marginLeft:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
+                                <input type="number" value={this.state.runtimeFinal} onChange={evt => this.updateInputValue(evt,"runtimeFinal")} min={0} max={10000} style={{marginLeft:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
                             </div>
                         </div>
                     </Form.Group>
@@ -182,18 +296,18 @@ class SearchForm extends React.Component {
                         <div>
                             <Form.Label>Rating:</Form.Label>
                             <div>
-                                <input type="number" min={0} max={10000} style={{marginRight:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
+                                <input type="number" value={this.state.ratingInitial} onChange={evt => this.updateInputValue(evt,"ratingInitial")} min={0} max={10} step={0.1} style={{marginRight:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
                                 TO
-                                <input type="number" min={0} max={10000} style={{marginLeft:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
+                                <input type="number" value={this.state.ratingFinal} onChange={evt => this.updateInputValue(evt,"ratingFinal")} min={0} max={10} step={0.1} style={{marginLeft:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
                             </div>
                         </div>
 
                         <div>
                             <Form.Label>Number of Votes:</Form.Label>
                             <div>
-                                <input type="number" min={0} max={10000} style={{marginRight:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
+                                <input type="number" value={this.state.numVotesInitial} onChange={evt => this.updateInputValue(evt,"numVotesInitial")} min={0} max={1000000} style={{marginRight:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
                                 TO
-                                <input type="number" min={0} max={10000} style={{marginLeft:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
+                                <input type="number" value={this.state.numVotesFinal} onChange={evt => this.updateInputValue(evt,"numVotesFinal")} min={0} max={1000000} style={{marginLeft:'1rem'}} onKeyDown={(evt) => evt.key === 'e' && evt.preventDefault()} />
                             </div>
                         </div>
                     </Form.Group>

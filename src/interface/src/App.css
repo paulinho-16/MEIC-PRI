@@ -72,9 +72,18 @@ label {
 .no-results {
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    flex-direction: row;
     margin-top: 1rem;
+    width: 100%;
+}
+
+.no-results-message{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 1rem;
+    width: 100%;
 }
 
 .num-results {
@@ -110,6 +119,7 @@ label {
 
 .container-fluid .row {
     padding-top: 4rem;
+    width: 100%;
 }
 
 .card {
@@ -213,6 +223,7 @@ label {
     width: 65%;
     height: 100%;
     float:right;
+    padding-bottom: 3rem;
 }
 
 .popup-summary {
@@ -247,6 +258,7 @@ td {
 
 .imdb-rating {
     height: 1em;
+    margin-left: 5px;
 }
 
 .imdb-rating-box {
@@ -268,6 +280,7 @@ td {
     text-shadow: 1px 1px orange;
     font-weight: bold;
     font-family: "Times New Roman";
+    text-indent: 5px;
 }
 
 .imdb-rating-main {
@@ -277,5 +290,25 @@ td {
 
 .showModal {
     top: 50%;
-  transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+th.collumn {
+    width: 100%;
+    padding-right: 20px;
+    padding-left: 10px;
+    color: rgb(26, 47, 235);
+    font-weight: normal;
+    font-style: italic;
+}
+
+.collumn-h5 {
+    width: 100%;
+    padding-right: 20px;
+    padding-left: 20px;
+    font-weight: bold;
+}
+
+.collumn-h5.h5 {
+    font-weight: bold;
 }

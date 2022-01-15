@@ -88,6 +88,14 @@ export default class ShowModal extends Component {
             certificates = <div>Not Available</div>;
         }
 
+        var numVotes;
+        if (this.props.result['numVotes']) {
+            numVotes = <tr><th>Number of votes:</th><td>{this.props.result['numVotes']}</td></tr>
+        }
+        else {
+            numVotes = ""
+        }
+
         return (
             <Modal show={this.props.show} onHide={this.props.hide} className='showModal'>
                 <Modal.Header closeButton className='showModal-header'>
@@ -125,16 +133,17 @@ export default class ShowModal extends Component {
                                 </div>
                                 <table>
                                     <tbody>
+                                        <tr>
+                                            <th>Type:</th>
+                                            <td>{this.props.result['type']}</td>
+                                        </tr>
                                         {language}
                                         {originCountry}
                                         {runtime}
                                         {startYear}
                                         {endYear}
                                         {episodes}
-                                        <tr>
-                                            <th>Type:</th>
-                                            <td>{this.props.result['type']}</td>
-                                        </tr>
+                                        {numVotes}
                                     </tbody>
                                 </table>
                             </div>

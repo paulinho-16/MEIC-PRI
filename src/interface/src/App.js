@@ -23,11 +23,16 @@ class App extends React.Component {
 		super(props);
 		this.state = {
 			results: [],
+			spellcheck: [],
 		};
 	}
 
 	updateResults = (results) => {
 		this.setState({ results: results });
+	};
+
+	updateSpellCheck = (spellcheck) => {
+		this.setState({ spellcheck: spellcheck });
 	};
 
 	render() {
@@ -43,8 +48,8 @@ class App extends React.Component {
 					<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/2560px-Netflix_2015_logo.svg.png" className="netflix-logo" alt="Netflix logo" />
 				</header>
 				<div className='content'>
-					<SearchForm updateResults={this.updateResults} />
-					<SearchResults results={this.state.results} />
+					<SearchForm updateResults={this.updateResults} updateSpellCheck={this.updateSpellCheck} />
+					<SearchResults results={this.state.results} spellcheck={this.state.spellcheck} />
 				</div>
 			</div>
 		);
