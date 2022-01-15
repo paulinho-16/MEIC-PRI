@@ -51,56 +51,55 @@ class SearchForm extends React.Component {
     handleSearch = () => {
         const searchText = this.searchTextRef.current.value        
         const show_types = this.state.types.filter((_, index) => this.state.checked[index]);
-        console.log(show_types)
+
+        if (show_types.length == 0) {
+            this.props.updateResults([])
+            return
+        }
 
         let uri = null
         if (searchText === '') // TODO: recolher apenas alguns de todos os resultados (paginação?)
-            uri = `/solr/shows/select?indent=true&q.op=OR&q=*:*`
+            uri = '/solr/shows/select?indent=true&q.op=OR&q=*:*'
         else
-            uri = `/solr/shows/select?indent=true&q.op=OR&q=title:"${searchText}"` // TODO: language:"${searchText}" summary:"${searchText}" 
+            uri = `/solr/shows/select?indent=true&q.op=OR&q=(title:"${searchText}" language:"${searchText}" summary:"${searchText}")` // TODO: language:"${searchText}" summary:"${searchText}" 
 
         if (this.state.startYearInitial > 0 & this.state.startYearFinal >0 )
         {
-            uri = uri + ` startYear:[${this.state.startYearInitial} TO ${this.state.startYearFinal}]`
-            uri = uri.replace("q.op=OR","q.op=AND")
+            uri = uri + ` AND startYear:[${this.state.startYearInitial} TO ${this.state.startYearFinal}]`
         }
         else if (this.state.startYearInitial > 0)
         {
-            uri = uri + ` startYear:[${this.state.startYearInitial} TO 9999]`
-            uri = uri.replace("q.op=OR","q.op=AND")
+            uri = uri + ` AND startYear:[${this.state.startYearInitial} TO 3000]`
         }
         else if (this.state.startYearFinal > 0 )
         {
-            uri = uri + ` startYear:[1 TO ${this.state.startYearFinal}]`
-            uri = uri.replace("q.op=OR","q.op=AND")
-        }
-        else {
-            this.state.startYearInitial = ""
-            this.state.startYearFinal = ""
+            uri = uri + ` AND startYear:[1 TO ${this.state.startYearFinal}]`
         }
 
         if (this.state.endYearInitial > 0 & this.state.endYearFinal >0 )
         {
-            uri = uri + ` endYear:[${this.state.endYearInitial} TO ${this.state.endYearFinal}]`
-            uri = uri.replace("q.op=OR","q.op=AND")
+            uri = uri + ` AND endYear:[${this.state.endYearInitial} TO ${this.state.endYearFinal}]`
         }
         else if (this.state.endYearInitial > 0)
         {
-            uri = uri + ` endYear:[${this.state.endYearInitial} TO 9999]`
-            uri = uri.replace("q.op=OR","q.op=AND")
+            uri = uri + ` AND endYear:[${this.state.endYearInitial} TO 3000]`
         }
         else if (this.state.endYearFinal > 0 )
         {
-            uri = uri + ` endYear:[1 TO ${this.state.endYearFinal}]`
-            uri = uri.replace("q.op=OR","q.op=AND")
+            uri = uri + ` AND endYear:[1 TO ${this.state.endYearFinal}]`
         }
-        else {
-            this.state.endYearInitial = ""
-            this.state.endYearFinal = ""
+  
+        for (var i = 0; i < show_types.length; i++) {
+            if (i == 0)
+                uri += ` AND (type:"${show_types[i]}"`
+            else
+                uri += ` type:"${show_types[i]}"`
         }
 
-        uri = uri + "&rows=20"
+        uri += ')'
         
+        uri += '&rows=100'
+
         console.log(uri)
 
         let uri_encoded = encodeURI(uri);
@@ -128,13 +127,13 @@ class SearchForm extends React.Component {
                         <Form.Label>Type:</Form.Label>
                         {this.state.types.map((type, index) => (
                             <div key={type}>
-                                <Form.Check
-                                    type='checkbox'
-                                    id={`${type}`}
-                                    label={`${type}`}
+                                <input
+                                    type="checkbox"
+                                    name="showtypes"
+                                    value={`${type}`}
                                     defaultChecked={this.state.checked[index]}
                                     onChange={() => this.handleCheckbox(index)}
-                                />
+                                /> {`${type}`}
                             </div>
                         ))}
                     </Form.Group>
