@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import Modal from "react-bootstrap/Modal";
 import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 
 export default class ShowModal extends Component {
     constructor(props) {
@@ -44,12 +46,11 @@ export default class ShowModal extends Component {
 
         var cast;
         if (this.props.result["cast"]) {
-            let c = this.props.result["cast"];
-            c = String(c).substr(1, c.length - 2);
-            cast = <tr><th>Cast:</th><td>{c}</td></tr>;
+            let c = String(this.props.result['cast']).replace(/[^a-zA-Z, ]/g, "");
+            cast = <tr>{c}</tr>;
         }
         else {
-            cast = "";
+            cast = <div>Not Available</div>;
         }
 
         var language;
@@ -78,57 +79,140 @@ export default class ShowModal extends Component {
 
         this.genres = String(this.props.result['genres']).replace(/[^a-zA-Z ]/g, "").split(" ")
 
+        var certificates;
+        if (this.props.result['certificate']) {
+            let cert = String(this.props.result['certificate']).replace(/[^a-zA-Z,:\d+ -]/g, "")
+            certificates = <tr>{cert}</tr>;
+        }
+        else {
+            certificates = <div>Not Available</div>;
+        }
+
         return (
             <Modal show={this.props.show} onHide={this.props.hide} className='showModal'>
                 <Modal.Header closeButton className='showModal-header'>
                     <Modal.Title>{this.props.result['title']}</Modal.Title>
                 </Modal.Header>
 
-                <Modal.Body className='showModal-body'>
-                    <div className='popup-image'>
-                        <img src={this.props.result['imageURL']} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
-                        <div className='imdb-rating-box'>Rating:<span className='imdb-rating-text'>{this.props.result['rating']}</span>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png" className='imdb-rating' alt="IMDb Rating" />
-                        </div>
-                    </div>
-                    <div className="popup-info">
-                        <div>
-                            <Button title="Polpular Rank" variant="danger" className='popular-rank' >
-                                <span variant="danger">{this.props.result['popularRank']}</span>
-                            </Button>
+                <Tabs defaultActiveKey="info" id="uncontrolled-tab-example" className="mb-3">
+                    <Tab eventKey="info" title="Info">
+                        <Modal.Body className='showModal-body'>
+                            <div className='popup-image'>
+                                <img src={this.props.result['imageURL']} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
+                                <div className='imdb-rating-box'>Rating:<span className='imdb-rating-text'>{this.props.result['rating']}</span>
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png" className='imdb-rating' alt="IMDb Rating" />
+                                </div>
+                            </div>
+                            <div className="popup-info">
+                                <div>
+                                    <Button title="Polpular Rank" variant="danger" className='popular-rank' >
+                                        <span variant="danger">{this.props.result['popularRank']}</span>
+                                    </Button>
 
-                        </div>
-                        <ListGroup horizontal>
-                            {
-                                this.genres.map(genre => {
-                                    return (
-                                        <ListGroup.Item key={genre} variant="danger">{genre}</ListGroup.Item>
-                                    )
-                                })
-                            }
-                        </ListGroup >
-                        <h3 className="popup-title">Description</h3>
-                        <div className="popup-summary">
-                            {this.props.result['summary']}
-                        </div>
-                        <table>
-                            <tbody>
-                                {language}
-                                {originCountry}
-                                {runtime}
-                                {startYear}
-                                {endYear}
-                                {episodes}
-                                <tr>
-                                    <th>Type:</th>
-                                    <td>{this.props.result['type']}</td>
-                                </tr>
-                                {cast}
-                            </tbody>
-                        </table>
-                    </div>
-                </Modal.Body>
+                                </div>
+                                <ListGroup horizontal>
+                                    {
+                                        this.genres.map(genre => {
+                                            return (
+                                                <ListGroup.Item key={genre} variant="danger">{genre}</ListGroup.Item>
+                                            )
+                                        })
+                                    }
+                                </ListGroup >
+                                <h3 className="popup-title">Description</h3>
+                                <div className="popup-summary">
+                                    {this.props.result['summary']}
+                                </div>
+                                <table>
+                                    <tbody>
+                                        {language}
+                                        {originCountry}
+                                        {runtime}
+                                        {startYear}
+                                        {endYear}
+                                        {episodes}
+                                        <tr>
+                                            <th>Type:</th>
+                                            <td>{this.props.result['type']}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </Modal.Body>
+                    </Tab>
+                    <Tab eventKey="cast" title="Cast">
+                        <Modal.Body className='showModal-body'>
+                            <div className='popup-image'>
+                                <img src={this.props.result['imageURL']} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
+                                <div className='imdb-rating-box'>Rating:<span className='imdb-rating-text'>{this.props.result['rating']}</span>
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png" className='imdb-rating' alt="IMDb Rating" />
+                                </div>
+                            </div>
+                            <div className="popup-info">
+                                <div>
+                                    <Button title="Polpular Rank" variant="danger" className='popular-rank' >
+                                        <span variant="danger">{this.props.result['popularRank']}</span>
+                                    </Button>
 
+                                </div>
+                                <ListGroup horizontal>
+                                    {
+                                        this.genres.map(genre => {
+                                            return (
+                                                <ListGroup.Item key={genre} variant="danger">{genre}</ListGroup.Item>
+                                            )
+                                        })
+                                    }
+                                </ListGroup >
+                                <h3 className="popup-title">Cast</h3>
+                                <div className="popup-summary">
+                                    {cast}
+                                </div>
+                                {/* <table>
+                                    <tbody>
+                                        {cast}
+                                    </tbody>
+                                </table> */}
+                            </div>
+                        </Modal.Body>
+                    </Tab>
+                    <Tab eventKey="certificates" title="Certificates">
+                        <Modal.Body className='showModal-body'>
+                            <div className='popup-image'>
+                                <img src={this.props.result['imageURL']} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
+                                <div className='imdb-rating-box'>Rating:<span className='imdb-rating-text'>{this.props.result['rating']}</span>
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png" className='imdb-rating' alt="IMDb Rating" />
+                                </div>
+                            </div>
+                            <div className="popup-info">
+                                <div>
+                                    <Button title="Polpular Rank" variant="danger" className='popular-rank' >
+                                        <span variant="danger">{this.props.result['popularRank']}</span>
+                                    </Button>
+
+                                </div>
+                                <ListGroup horizontal>
+                                    {
+                                        this.genres.map(genre => {
+                                            return (
+                                                <ListGroup.Item key={genre} variant="danger">{genre}</ListGroup.Item>
+                                            )
+                                        })
+                                    }
+                                </ListGroup >
+                                <h3 className="popup-title">Certificates</h3>
+                                <div className="popup-summary">
+                                    {certificates}
+                                </div>
+                                {/* <table>
+                                    <tbody>
+                                        {cast}
+                                    </tbody>
+                                </table> */}
+                            </div>
+                        </Modal.Body>
+                    </Tab>
+                </Tabs>
                 <Modal.Footer className='showModal-footer'>
                     <p>Footer</p>
                 </Modal.Footer>
