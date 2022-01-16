@@ -109,7 +109,7 @@ export default class ShowModal extends Component {
                     <Tab eventKey="info" title="Info">
                         <Modal.Body className='showModal-body'>
                             <div className='popup-image'>
-                                <img src={this.props.result['imageURL']} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
+                                <img src={this.props.image} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
                                 <div className='imdb-rating-box'>Rating:<span className='imdb-rating-text'>{this.props.result['rating']}</span>
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png" className='imdb-rating' alt="IMDb Rating" />
                                 </div>
@@ -152,7 +152,7 @@ export default class ShowModal extends Component {
                     <Tab eventKey="cast" title="Cast">
                         <Modal.Body className='showModal-body'>
                             <div className='popup-image'>
-                                <img src={this.props.result['imageURL']} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
+                                <img src={this.props.image} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
                                 <div className='imdb-rating-box'>Rating:<span className='imdb-rating-text'>{this.props.result['rating']}</span>
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png" className='imdb-rating' alt="IMDb Rating" />
                                 </div>
@@ -183,7 +183,7 @@ export default class ShowModal extends Component {
                     <Tab eventKey="certificates" title="Certificates">
                         <Modal.Body className='showModal-body'>
                             <div className='popup-image'>
-                                <img src={this.props.result['imageURL']} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
+                                <img src={this.props.image} className='card-img-popup' alt={`${this.props.result['title']} ${this.props.result['type']} poster`} />
                                 <div className='imdb-rating-box'>Rating:<span className='imdb-rating-text'>{this.props.result['rating']}</span>
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/2560px-IMDB_Logo_2016.svg.png" className='imdb-rating' alt="IMDb Rating" />
                                 </div>

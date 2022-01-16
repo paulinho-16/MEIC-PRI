@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.1.3",
     "bootstrap-icons": "^1.7.2",
+    "image-exists": "^1.1.0",
     "mdb-react-ui-kit": "^2.2.0",
     "mdbreact": "^5.2.0",
     "multiselect-react-dropdown": "^2.0.17",
