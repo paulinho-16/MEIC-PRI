@@ -9,30 +9,30 @@ export default function SearchResults({ results, spellcheck }) {
             break;
         }
     }
-    console.log(words)
+
     return (
         results.length > 0 ?
             <div>
                 <h3 className='num-results mt-4'>{results.length} results found</h3>
-                {words.length > 0?
+                {words.length > 0 ?
                     <div className='no-results'>
-                        <tr >
-                            <th className='collumn-h5'>
-                                {spellcheck.length > 0 ? <p>Did you mean: </p> : ""}
-                            </th>
+                        <span className='collumn-h5'>
+                            {spellcheck.length > 0 ? <p>Did you mean: </p> : ""}
+                        </span>
+                        <div className='suggestions'>
                             {
                                 words.map(word => {
                                     return (
-                                        <th className='collumn' key={word}>
+                                        <span className='collumn' key={word}>
                                             {word}
-                                        </th>
+                                        </span>
                                     )
                                 })
                             }
-                        </tr>
+                        </div>
                     </div>
-                :
-                ""    
+                    :
+                    ""
                 }
                 <div className='container-fluid d-flex justify-content-center'>
                     <div className='row pt-5'>
@@ -54,20 +54,20 @@ export default function SearchResults({ results, spellcheck }) {
                     <h3>No results found</h3>
                 </div>
                 <div className='no-results'>
-                    <tr >
-                        <th className='collumn-h5'>
-                            {spellcheck.length > 0 ? <p>Did you mean: </p> : ""}
-                        </th>
+                    <span className='collumn-h5'>
+                        {spellcheck.length > 0 ? <p>Did you mean: </p> : ""}
+                    </span>
+                    <div className='suggestions'>
                         {
                             words.map(word => {
                                 return (
-                                    <th className='collumn' key={word}>
+                                    <span className='collumn' key={word}>
                                         {word}
-                                    </th>
+                                    </span>
                                 )
                             })
                         }
-                    </tr>
+                    </div>
                 </div>
             </div>
     )

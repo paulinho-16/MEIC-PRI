@@ -47,7 +47,7 @@ export default class ShowModal extends Component {
         var cast;
         if (this.props.result["cast"]) {
             let c = String(this.props.result['cast']).replace(/[^a-zA-Z, ]/g, "");
-            cast = <tr>{c}</tr>;
+            cast = <div>{c}</div>;
         }
         else {
             cast = <div>Not Available</div>;
@@ -82,7 +82,7 @@ export default class ShowModal extends Component {
         var certificates;
         if (this.props.result['certificate']) {
             let cert = String(this.props.result['certificate']).replace(/[^a-zA-Z,:\d+ -]/g, "")
-            certificates = <tr>{cert}</tr>;
+            certificates = <div>{cert}</div>;
         }
         else {
             certificates = <div>Not Available</div>;
@@ -95,6 +95,9 @@ export default class ShowModal extends Component {
         else {
             numVotes = ""
         }
+
+        var type;
+        type = <tr><th>Type:</th><td>{this.props.result['type']}</td></tr>
 
         return (
             <Modal show={this.props.show} onHide={this.props.hide} className='showModal'>
@@ -133,10 +136,7 @@ export default class ShowModal extends Component {
                                 </div>
                                 <table>
                                     <tbody>
-                                        <tr>
-                                            <th>Type:</th>
-                                            <td>{this.props.result['type']}</td>
-                                        </tr>
+                                        {type}
                                         {language}
                                         {originCountry}
                                         {runtime}
@@ -177,11 +177,6 @@ export default class ShowModal extends Component {
                                 <div className="popup-summary">
                                     {cast}
                                 </div>
-                                {/* <table>
-                                    <tbody>
-                                        {cast}
-                                    </tbody>
-                                </table> */}
                             </div>
                         </Modal.Body>
                     </Tab>
@@ -213,11 +208,6 @@ export default class ShowModal extends Component {
                                 <div className="popup-summary">
                                     {certificates}
                                 </div>
-                                {/* <table>
-                                    <tbody>
-                                        {cast}
-                                    </tbody>
-                                </table> */}
                             </div>
                         </Modal.Body>
                     </Tab>
