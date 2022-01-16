@@ -38,6 +38,8 @@ class SearchForm extends React.Component {
         const searchText = this.searchTextRef.current.value
         const search_fields = this.state.fields.filter((_, index) => this.state.checked_fields[index]);
         const excluded_show_types = this.state.types.filter((_, index) => !this.state.checked_types[index]);
+        if (this.state.sortBy === "episodes ASC" || this.state.sortBy === "episodes DESC")
+            ['movie', 'animation', 'special', 'short'].forEach((type, index) => excluded_show_types.indexOf(type) === -1 ? excluded_show_types.push(type) : '')
 
         if (search_fields.length === 0 || excluded_show_types.length === this.state.types.length) {
             this.props.updateResults([])
@@ -83,6 +85,9 @@ class SearchForm extends React.Component {
 
         let ratingInitial = (this.state.ratingInitial) ? this.state.ratingInitial : '*'
         let ratingFinal = (this.state.ratingFinal) ? this.state.ratingFinal : '*'
+
+        if ((this.state.ratingInitial) == "*" && (this.state.sortBy === "rating ASC" || this.state.sortBy === "rating DESC"))
+            this.state.ratingInitial = 0
 
         uri += (!this.state.ratingInitial && !this.state.ratingFinal) ? '' : ` AND rating:[${ratingInitial} TO ${ratingFinal}]`
 
@@ -181,6 +186,8 @@ class SearchForm extends React.Component {
                                 <Dropdown.Item onClick={() => this.sortByUpdate("relevant") }>Relevant</Dropdown.Item>
                                 <Dropdown.Item onClick={() => this.sortByUpdate("rating ASC")}>Rating ASC</Dropdown.Item>
                                 <Dropdown.Item onClick={() => this.sortByUpdate("rating DESC")}>Rating DESC</Dropdown.Item>
+                                <Dropdown.Item onClick={() => this.sortByUpdate("episodes ASC")}>Episodes ASC</Dropdown.Item>
+                                <Dropdown.Item onClick={() => this.sortByUpdate("episodes DESC")}>Episodes DESC</Dropdown.Item>
                                 <Dropdown.Item onClick={() => this.sortByUpdate("numVotes ASC")}>Number of Votes ASC</Dropdown.Item>
                                 <Dropdown.Item onClick={() => this.sortByUpdate("numVotes DESC")}>Number of Votes DESC</Dropdown.Item>
                             </Dropdown.Menu>

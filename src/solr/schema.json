@@ -120,6 +120,7 @@
                     "class":"solr.StandardTokenizerFactory"
                 },
                 "filters":[ 
+                    {"class":"solr.SynonymGraphFilterFactory", "expand":"false", "ignoreCase":"true", "synonyms":"synonyms.txt"},
                     {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
                     {"class":"solr.StopFilterFactory", "words":"stopwords.txt", "ignoreCase":"true"},
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
@@ -131,6 +132,7 @@
                     "class":"solr.StandardTokenizerFactory"
                 },
                 "filters":[ 
+                    {"class":"solr.SynonymGraphFilterFactory", "expand":"false", "ignoreCase":"true", "synonyms":"synonyms.txt"},
                     {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
                     {"class":"solr.StopFilterFactory", "words":"stopwords.txt", "ignoreCase":"true"},
                     {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
