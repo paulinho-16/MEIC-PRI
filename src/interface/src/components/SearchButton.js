@@ -8,8 +8,7 @@ export class SearchButton extends Component {
 
     render() {
         return (
-            // TODO: In the future, change to onChange maybe
-            <Button variant="primary" type="button" className="search-button" onClick={this.props.handleFunction}>
+            <Button variant="danger" type="button" className="search-button" onClick={this.props.handleFunction}>
                 Submit
             </Button>
         )
