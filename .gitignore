@@ -1,4 +1,9 @@
-# Generated folders and files
+# Generated folders and files in Tutorials
+Project/env/
+Project/src/plots/
+Project/src/app/node_modules/
+
+# Generated folders and files in Tutorials
 Tutorials/Makefiles/data/
 Tutorials/Makefiles/page*/
 

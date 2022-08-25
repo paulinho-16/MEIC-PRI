@@ -1,0 +1,265 @@
+{
+	"add-field-type": [
+        {
+            "name":"id",
+            "class":"solr.TextField",
+            "indexAnalyser":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.LowerCaseFilterFactory"},
+                    {"class":"solr.PatternReplaceCharFilterFactory", "pattern":"([a-zA-Z])", "replacement":""}
+                ]
+            },
+            "queryAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.LowerCaseFilterFactory"},
+                    {"class":"solr.PatternReplaceCharFilterFactory", "pattern":"([a-zA-Z])", "replacement":""}
+                ]
+            }
+        },
+        {
+            "name":"title",
+            "class":"solr.TextField",
+            "indexAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.SynonymGraphFilterFactory", "expand":"true", "ignoreCase":"true", "synonyms":"synonyms.txt"},
+                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.EnglishMinimalStemFilterFactory"},
+                    {"class":"solr.LowerCaseFilterFactory"},
+                    {"class":"solr.KStemFilterFactory"}
+                ]
+            },
+            "queryAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.SynonymGraphFilterFactory", "expand":"true", "ignoreCase":"true", "synonyms":"synonyms.txt"},
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.EnglishMinimalStemFilterFactory"},
+                    {"class":"solr.LowerCaseFilterFactory"},
+                    {"class":"solr.KStemFilterFactory"}
+                ]
+            }
+        },
+        {
+            "name":"certificate",
+            "class":"solr.TextField",
+            "indexAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            },
+            "queryAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            }
+        },
+        {
+            "name":"type_plural",
+            "class":"solr.TextField",
+            "indexAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.WhitespaceTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.PatternReplaceCharFilterFactory", "pattern":"(-)", "replacement":""},
+                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"2", "maxGramSize":"5", "preserveOriginal":true},
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            },
+            "queryAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.WhitespaceTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.PatternReplaceCharFilterFactory", "pattern":"(-)", "replacement":""},
+                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"2", "maxGramSize":"5", "preserveOriginal":true},
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            }
+        },
+        {
+            "name":"lower_clean",
+            "class":"solr.TextField",
+            "analyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            }
+        },
+        {
+            "name":"summary",
+            "class":"solr.TextField",
+            "indexAnalyser":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[ 
+                    {"class":"solr.SynonymGraphFilterFactory", "expand":"false", "ignoreCase":"true", "synonyms":"synonyms.txt"},
+                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
+                    {"class":"solr.StopFilterFactory", "words":"stopwords.txt", "ignoreCase":"true"},
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            },
+            "queryAnalyzer":{
+                "tokenizer":{
+                    "class":"solr.StandardTokenizerFactory"
+                },
+                "filters":[ 
+                    {"class":"solr.SynonymGraphFilterFactory", "expand":"false", "ignoreCase":"true", "synonyms":"synonyms.txt"},
+                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
+                    {"class":"solr.StopFilterFactory", "words":"stopwords.txt", "ignoreCase":"true"},
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            }
+        },
+        {
+            "name":"cast",
+            "class":"solr.TextField",
+            "analyzer":{
+                "tokenizer":{
+                    "class":"solr.ClassicTokenizerFactory"
+                },
+                "filters":[
+                    {"class":"solr.EdgeNGramFilterFactory", "minGramSize":"4", "maxGramSize":"10", "preserveOriginal":true},
+                    {"class":"solr.ClassicFilterFactory"},
+                    {"class":"solr.ASCIIFoldingFilterFactory", "preserveOriginal":true},
+                    {"class":"solr.LowerCaseFilterFactory"}
+                ]
+            }
+        }
+    ],
+    "add-field": [
+        {
+            "name": "imdbID",
+            "type": "id",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "title",
+            "type": "title",
+            "indexed": true,
+            "stored": true,
+            "multiValued":"true",
+            "omitNorms":"true"
+        },
+        {
+            "name": "popularRank",
+            "type": "pint",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "certificate",
+            "type": "certificate",
+            "indexed": true,
+            "stored":true
+        },
+        {
+            "name": "startYear",
+            "type": "pint",
+            "indexed": true,
+            "stored":true
+        },
+        {
+            "name": "endYear",
+            "type": "pint",
+            "indexed": true,
+            "stored":true
+        },
+        {
+            "name": "episodes",
+            "type": "pint",
+            "indexed": true,
+            "stored":true
+        },
+        {
+            "name": "runtime",
+            "type": "pint",
+            "indexed": true,
+            "stored":true
+        },
+        {
+            "name": "type",
+            "type": "type_plural",
+            "indexed": true,
+            "stored":true
+        },
+        {
+            "name": "originCountry",
+            "type": "lower_clean",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "language",
+            "type": "lower_clean",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "summary",
+            "type": "summary",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "rating",
+            "type": "pfloat",
+            "indexed": true,
+            "stored":true
+        },
+        {
+            "name": "numVotes",
+            "type": "pint",
+            "indexed": true,
+            "stored":true
+        },
+        {
+            "name": "genres",
+            "type": "lower_clean",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "cast",
+            "type": "cast",
+            "indexed": true,
+            "stored": true
+        },
+        {
+            "name": "imageURL",
+            "type": "string",
+            "indexed": true,
+            "stored":false
+        }
+    ]
+}
